@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const _ = require('lodash');
+const bcrypt = require('bcryptjs');
 
 
 // {
@@ -82,6 +83,20 @@ UserSchema.statics.findByToken = function (token) {
   });
 };
 
+UserSchema.pre('save', function(next){
+  var user = this;
+  if(user.isModified('password')){
+    bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(user.password, salt, (err, hash) => {
+          console.log(hash);
+          user.password = hash;
+          next();
+        });
+      });
+  }else{
+    next();
+  }
+});
 
 //Instance method get called with individual document 
 //Model method get called with the model as this binding.
