@@ -1,0 +1,48 @@
+﻿1
+00:00:00,710 --> 00:00:06,560
+Hello and welcome to Section 8 security and authentication in this section we're going to be continuing
+
+2
+00:00:06,620 --> 00:00:12,600
+on with the to do API turning it into a more real world application by adding user accounts.
+
+3
+00:00:12,710 --> 00:00:18,050
+Up until now anybody could come in and manage to do is created by anybody else I could go in and wipe
+
+4
+00:00:18,050 --> 00:00:18,850
+everyone's data.
+
+5
+00:00:18,860 --> 00:00:20,590
+And there's nothing they could do about it.
+
+6
+00:00:20,660 --> 00:00:23,760
+Once we add user accounts we're going to be locking down that data.
+
+7
+00:00:23,870 --> 00:00:27,430
+You're only going to be able to do anything with the news when you're logged in.
+
+8
+00:00:27,470 --> 00:00:32,390
+You only see to news you create it and you can only update the dues that you created.
+
+9
+00:00:32,390 --> 00:00:37,670
+Now in order to do all this we are going to look at some advanced Mongo DB and Mongoose topics and we're
+
+10
+00:00:37,670 --> 00:00:43,370
+also going to look at some security topics like hashing encryption and Jason Webb tokens all of this
+
+11
+00:00:43,370 --> 00:00:44,740
+is coming up in this section.
+
+12
+00:00:44,750 --> 00:00:48,280
+But let's get started by creating our user model
+

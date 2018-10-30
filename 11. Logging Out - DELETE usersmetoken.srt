@@ -1,0 +1,484 @@
+﻿1
+00:00:00,360 --> 00:00:06,120
+In this video we're going to add our final authentication related call it's going to be a call to log
+
+2
+00:00:06,120 --> 00:00:11,580
+out a user which means it is going to be a call that requires authentication we can't lock someone out
+
+3
+00:00:11,610 --> 00:00:15,880
+unless they're logged in and all we're going to do is remove the token from the tokens.
+
+4
+00:00:15,890 --> 00:00:16,530
+Right.
+
+5
+00:00:16,800 --> 00:00:18,700
+First up let's define the route.
+
+6
+00:00:18,720 --> 00:00:24,090
+It's going to be a delete route since we're trying to remove something so I'll call app delete to register
+
+7
+00:00:24,090 --> 00:00:30,170
+it and the you are all for this one is going to be forward slash users forward slash me bored slash
+
+8
+00:00:30,220 --> 00:00:30,860
+tokin.
+
+9
+00:00:30,930 --> 00:00:35,330
+We're trying to delete the token off of the currently logged in user.
+
+10
+00:00:35,340 --> 00:00:39,810
+Now you're not going to need to pass the token value in via the body or some sort of you or L parameter
+
+11
+00:00:39,810 --> 00:00:44,490
+instead we're just going to make this route private which means you're going to have to be authenticated
+
+12
+00:00:44,490 --> 00:00:46,150
+in order to ever run the code.
+
+13
+00:00:46,200 --> 00:00:52,090
+And if you remember inside of our authentication middleware we store the token used right here for Quest's
+
+14
+00:00:52,170 --> 00:00:53,770
+token equals the token.
+
+15
+00:00:53,850 --> 00:00:57,870
+So we'll be able to grab that token value out later to add authentication.
+
+16
+00:00:57,870 --> 00:01:03,840
+All we have to do is specify the authenticate middleware just like we did for our other private route.
+
+17
+00:01:04,070 --> 00:01:04,750
+And there we go.
+
+18
+00:01:04,760 --> 00:01:06,440
+That is all that we have to do.
+
+19
+00:01:06,530 --> 00:01:12,630
+Now we can add our callback with a request and response argument we can finish off our aero function
+
+20
+00:01:12,630 --> 00:01:18,380
+and in here we're going to actually write the code to delete the token and that was used inside of the
+
+21
+00:01:18,380 --> 00:01:21,740
+authentication middleware to actually remove the token.
+
+22
+00:01:21,740 --> 00:01:23,170
+All we're going to do is call a method.
+
+23
+00:01:23,270 --> 00:01:27,980
+We have to define that method but in here in a server as well we're going to do is call an instance
+
+24
+00:01:27,980 --> 00:01:33,770
+method we have access to the user via Everquest dot user since they're authenticated and we can call
+
+25
+00:01:33,770 --> 00:01:35,980
+an instance method by calling it right here.
+
+26
+00:01:36,020 --> 00:01:41,780
+We're going to make one called remove tokin never move token is going to need to know which token you
+
+27
+00:01:41,780 --> 00:01:43,280
+want to remove but that's fine.
+
+28
+00:01:43,280 --> 00:01:47,890
+We also have that information it's stored on request a dot token.
+
+29
+00:01:47,990 --> 00:01:52,490
+And before we actually fill out this function Let's go ahead and figure out what we want it to do in
+
+30
+00:01:52,490 --> 00:01:56,090
+terms of response and then we can go ahead and actually write the code.
+
+31
+00:01:56,210 --> 00:02:00,590
+Ideally it would return a promise because we're going to need to respond to the user once the token
+
+32
+00:02:00,590 --> 00:02:01,700
+has been deleted.
+
+33
+00:02:01,910 --> 00:02:04,280
+We can attach a then call back right here.
+
+34
+00:02:04,280 --> 00:02:05,970
+We don't need any data back.
+
+35
+00:02:06,020 --> 00:02:13,790
+We just need to know when the token was deleted so we can respond response status 200 dot send is going
+
+36
+00:02:13,790 --> 00:02:15,130
+to get the job done there.
+
+37
+00:02:15,230 --> 00:02:20,660
+And if things don't go well for some reason we'll respond with a 400 inside of our second call back
+
+38
+00:02:20,660 --> 00:02:27,800
+to then this is going to fire if there's any errors response status 400 and we're going to send that
+
+39
+00:02:27,800 --> 00:02:29,390
+back as well.
+
+40
+00:02:29,390 --> 00:02:33,710
+Now that we know how we want to use the removed token method let's go ahead and actually define it over
+
+41
+00:02:33,710 --> 00:02:34,940
+inside of user.
+
+42
+00:02:35,040 --> 00:02:35,700
+Yes.
+
+43
+00:02:35,960 --> 00:02:38,970
+I'm going to scroll down and this is going to be an instance method.
+
+44
+00:02:39,050 --> 00:02:41,990
+So I'll define it right below our last instance method.
+
+45
+00:02:41,990 --> 00:02:46,400
+This one will be on user schema like our other instance methods have been.
+
+46
+00:02:46,460 --> 00:02:52,550
+We're going to go on to the methods object and we're going to create remove tokin never move tokens
+
+47
+00:02:52,550 --> 00:02:55,000
+as we just discussed is going to need an argument.
+
+48
+00:02:55,040 --> 00:03:00,620
+It is going to need the Tokin to delete just like this and we're going to do is call the update method
+
+49
+00:03:00,830 --> 00:03:02,810
+to update our array.
+
+50
+00:03:02,810 --> 00:03:04,370
+Now we have this array of tokens.
+
+51
+00:03:04,370 --> 00:03:05,760
+We defined it right here.
+
+52
+00:03:05,810 --> 00:03:12,230
+What we want to do is remove any object from the array that has a token property equal to the value
+
+53
+00:03:12,230 --> 00:03:17,820
+that we passed in in order to get that done we're going to be using a really awesome Mongo DB operator.
+
+54
+00:03:17,840 --> 00:03:19,590
+It's called dollar sign.
+
+55
+00:03:19,610 --> 00:03:26,540
+Paul Paul lets you remove items from an array that match certain criteria to take a look at how this
+
+56
+00:03:26,540 --> 00:03:26,980
+works.
+
+57
+00:03:26,990 --> 00:03:32,780
+We are going to make a variable called a lowercase you user since this is an instance method and we'll
+
+58
+00:03:32,780 --> 00:03:40,410
+set it equal to this and then down below we can go ahead and call user dot update user data update.
+
+59
+00:03:40,430 --> 00:03:41,380
+Doesn't take a query.
+
+60
+00:03:41,390 --> 00:03:47,030
+We already have the user We're updating all we do is pass in the updates object right here.
+
+61
+00:03:47,030 --> 00:03:52,260
+We're going to use the pull operator and the pull operator gets set equal to an object.
+
+62
+00:03:52,340 --> 00:03:55,820
+And on here we can define what we want to pull from.
+
+63
+00:03:55,820 --> 00:04:02,180
+We're going to pull from the tokens array I specify tokens and we're going to pull any object on the
+
+64
+00:04:02,180 --> 00:04:07,930
+array that has a token property equal to the token argument passed here.
+
+65
+00:04:07,940 --> 00:04:12,980
+So if this token doesn't match anything in the array it's not going to remove anything if the token
+
+66
+00:04:12,980 --> 00:04:18,350
+does match something in that array is going to get removed not just the token property of the entire
+
+67
+00:04:18,350 --> 00:04:24,000
+object which means the object with the id the access property and the token property.
+
+68
+00:04:24,110 --> 00:04:27,150
+That means there'll be one less item in the array.
+
+69
+00:04:27,200 --> 00:04:28,490
+Now I am going to return this.
+
+70
+00:04:28,520 --> 00:04:33,860
+This is going to let us chain together our call that we already set up over inside of server jacks right
+
+71
+00:04:33,860 --> 00:04:34,390
+here.
+
+72
+00:04:34,430 --> 00:04:36,450
+And with this in place we are done.
+
+73
+00:04:36,500 --> 00:04:40,370
+There really isn't a heck of a lot to do when it comes to removing a token.
+
+74
+00:04:40,370 --> 00:04:42,130
+I can simplify this even further.
+
+75
+00:04:42,140 --> 00:04:47,870
+I have a property name equal to a variable with the same name which means right here I can just specify
+
+76
+00:04:47,900 --> 00:04:50,360
+token like this.
+
+77
+00:04:50,360 --> 00:04:54,740
+Now that we have this in place let's go ahead and test things out over inside a postman and see what
+
+78
+00:04:54,740 --> 00:05:01,760
+happens when we make a request to log out a user before I make any requests to go ahead and wipe my
+
+79
+00:05:01,760 --> 00:05:08,050
+database once again so I can start fresh if I refresh it I can see I do indeed have a to do app database.
+
+80
+00:05:08,060 --> 00:05:09,140
+I'll go ahead and drop it.
+
+81
+00:05:09,170 --> 00:05:16,110
+Then I can start up my server over inside of the terminal node server forward slashes server.
+
+82
+00:05:16,280 --> 00:05:18,800
+Yes once the server is up and running.
+
+83
+00:05:18,830 --> 00:05:26,060
+I'm going to head into post man make a user using the post user's request and the default data works
+
+84
+00:05:26,090 --> 00:05:27,310
+just fine.
+
+85
+00:05:27,320 --> 00:05:30,440
+I'm going to send off this user and I do get a 200 back.
+
+86
+00:05:30,440 --> 00:05:35,180
+Which means that a user was successfully created and I also had that X auth token.
+
+87
+00:05:35,180 --> 00:05:41,980
+Now to prove that the X auth token was actually saved inside of the database I'm going to go ahead and
+
+88
+00:05:41,980 --> 00:05:43,710
+open up the user's collection.
+
+89
+00:05:43,900 --> 00:05:48,590
+I'm going to refresh to reveal the new database then we can go ahead and expand it.
+
+90
+00:05:48,760 --> 00:05:53,590
+Grabbing the users collection and viewing all of those documents inside here we have our one user and
+
+91
+00:05:53,590 --> 00:05:59,570
+there is indeed one token with the token value of the X or token we just got back.
+
+92
+00:05:59,590 --> 00:06:03,230
+Now let's go ahead and try and remove this completely inside of post man.
+
+93
+00:06:03,250 --> 00:06:09,890
+I'm going to grab this X auth token value copy it to the clipboard and make a brand new request.
+
+94
+00:06:09,910 --> 00:06:12,520
+This is going to be a delete request.
+
+95
+00:06:12,610 --> 00:06:18,870
+We're going to use the same base you are al the rest of the path is forward slash users forward slash
+
+96
+00:06:18,870 --> 00:06:25,590
+me forward slash tokin then I can go ahead and set up the proper header which is the X hyphen off Hetter
+
+97
+00:06:25,830 --> 00:06:27,960
+and I'm going to set it equal to the value of the token.
+
+98
+00:06:27,960 --> 00:06:30,100
+I just create it if I send this off.
+
+99
+00:06:30,120 --> 00:06:30,680
+What do we get.
+
+100
+00:06:30,690 --> 00:06:36,750
+We get a 200 back and if I go into Roboam mango we can go ahead and refresh the users collection one
+
+101
+00:06:36,750 --> 00:06:37,430
+more time.
+
+102
+00:06:37,620 --> 00:06:42,340
+We still have our user but this time there are no elements inside of the tokens array.
+
+103
+00:06:42,420 --> 00:06:44,940
+And this is fantastic.
+
+104
+00:06:44,940 --> 00:06:49,740
+Now if I try to make the exact same request inside of postman again we're going to get a 401.
+
+105
+00:06:49,770 --> 00:06:56,160
+Authorized because this token no longer exists and you have to be logged in in order to make this request
+
+106
+00:06:56,700 --> 00:06:58,230
+with the request set up and working.
+
+107
+00:06:58,230 --> 00:07:02,880
+I'm going to go ahead and save it to our collection so we can easily make it later on.
+
+108
+00:07:02,880 --> 00:07:10,130
+Let's save this one as changing the name to delete followed by the you are l and I'm going to add it
+
+109
+00:07:10,130 --> 00:07:14,790
+to our existing to do app collection perfect.
+
+110
+00:07:15,010 --> 00:07:18,800
+With that in place we are done with our alog out call.
+
+111
+00:07:18,850 --> 00:07:24,160
+We'll be testing it in the next video but for now we can go ahead and make a commit saving our changes.
+
+112
+00:07:24,340 --> 00:07:28,540
+I'm going to run and get status and we have our two changed files as expected.
+
+113
+00:07:28,540 --> 00:07:32,540
+I can run it get commit with the name and flag and right here.
+
+114
+00:07:32,650 --> 00:07:41,620
+I'm going to go ahead and specify the message add delete the users me token route.
+
+115
+00:07:41,810 --> 00:07:42,760
+I'm going to make that commit.
+
+116
+00:07:42,770 --> 00:07:43,860
+Push it up to get help.
+
+117
+00:07:43,880 --> 00:07:45,410
+And that is it for this one.
+
+118
+00:07:45,440 --> 00:07:50,720
+I will see you in the next video where we test our final route from there on out will be integrating
+
+119
+00:07:50,750 --> 00:07:53,950
+the user collection with the to do collection.
+
+120
+00:07:53,960 --> 00:07:54,560
+Stay tuned.
+
+121
+00:07:54,550 --> 00:07:55,850
+I will see you soon
+

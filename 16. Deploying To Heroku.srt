@@ -1,0 +1,576 @@
+﻿1
+00:00:00,420 --> 00:00:05,360
+In this video we're going to get the to do API back on Heroku before we do though.
+
+2
+00:00:05,370 --> 00:00:10,750
+Let's go ahead and connect to our production database via robo Mongo so we can manage that data.
+
+3
+00:00:10,770 --> 00:00:16,540
+We have some really old leftover data from before we updated the to do end user models.
+
+4
+00:00:16,650 --> 00:00:22,340
+Now to get that you are Al we know we can run a command from the terminal Heroku config would work.
+
+5
+00:00:22,380 --> 00:00:28,350
+Or more specifically we can run Heroku config call and get followed by the environment variable name
+
+6
+00:00:28,740 --> 00:00:35,490
+Mongo D-B underscore you are I and what we get back is a really long connection string.
+
+7
+00:00:35,640 --> 00:00:39,360
+Now this connection string actually contains a ton of really useful information.
+
+8
+00:00:39,420 --> 00:00:43,980
+We're going to need to know which piece is which because we're going to have to add all of this into
+
+9
+00:00:43,980 --> 00:00:49,770
+individual fields inside of the Roble Mongo application in Roboam Mongo.
+
+10
+00:00:49,830 --> 00:00:55,260
+If we go ahead and add a new connection by clicking the two computers and clicking create you see that
+
+11
+00:00:55,260 --> 00:00:57,760
+we don't get a place for a long connection sharing.
+
+12
+00:00:57,780 --> 00:01:03,510
+Instead we have things like address port and under authentication we have things like database username
+
+13
+00:01:03,510 --> 00:01:04,420
+and password.
+
+14
+00:01:04,440 --> 00:01:08,020
+All of this exists inside of the string we have right here.
+
+15
+00:01:08,250 --> 00:01:11,130
+Now the first part the part I have highlighted this is the protocol.
+
+16
+00:01:11,160 --> 00:01:13,920
+It's a mongo DB connection request.
+
+17
+00:01:13,920 --> 00:01:16,810
+Next up we have the username and password.
+
+18
+00:01:16,830 --> 00:01:22,290
+This starts after the protocol and it goes up to the at symbol right in the middle somewhere you should
+
+19
+00:01:22,290 --> 00:01:24,840
+see a call on everything before the colon.
+
+20
+00:01:24,840 --> 00:01:26,960
+What I have highlighted here is the user name.
+
+21
+00:01:27,030 --> 00:01:29,680
+Everything between the colon and the at symbol.
+
+22
+00:01:29,700 --> 00:01:31,610
+That is the password.
+
+23
+00:01:31,640 --> 00:01:36,020
+Now after that we have the address itself after the address.
+
+24
+00:01:36,030 --> 00:01:41,910
+We have the port and after the Port we have a forward slash followed by the database we're going to
+
+25
+00:01:41,910 --> 00:01:45,000
+go ahead and transfer all of this information into Roboam Mongo.
+
+26
+00:01:45,000 --> 00:01:47,480
+Starting with the actual address.
+
+27
+00:01:47,580 --> 00:01:50,090
+Everything from at to the Kallen.
+
+28
+00:01:50,310 --> 00:01:51,690
+I'm going to copy this to the clipboard.
+
+29
+00:01:51,690 --> 00:01:57,530
+Move over into Roboam Mongo and paste it right in the address field under connection.
+
+30
+00:01:57,530 --> 00:02:02,990
+I can also give this connection a name Heroku to do API.
+
+31
+00:02:03,000 --> 00:02:08,790
+Next up let's go ahead and grab the port the port which we can get over inside of the terminal is 1
+
+32
+00:02:08,850 --> 00:02:10,720
+7 7 3 6.
+
+33
+00:02:10,770 --> 00:02:15,030
+I'm going to copy that move into robo Mongo and paste it right here.
+
+34
+00:02:15,210 --> 00:02:21,270
+Next up under authentication we're going to have to perform authentication providing a database a user
+
+35
+00:02:21,270 --> 00:02:23,020
+name and a password.
+
+36
+00:02:23,190 --> 00:02:27,220
+We can keep the off mechanism the default value as shown here.
+
+37
+00:02:27,240 --> 00:02:33,310
+First up the database the database is the very end of the connection string after the forward slash.
+
+38
+00:02:33,330 --> 00:02:34,750
+We have our database name.
+
+39
+00:02:34,830 --> 00:02:39,900
+We can simply copy this take it and paste it into the database field.
+
+40
+00:02:39,930 --> 00:02:41,490
+Next up username and password.
+
+41
+00:02:41,490 --> 00:02:43,380
+Let's do the user name first.
+
+42
+00:02:43,380 --> 00:02:47,790
+Over inside of the terminal we have our user name right here and you'll notice the user name is actually
+
+43
+00:02:47,790 --> 00:02:50,310
+identical to the database name.
+
+44
+00:02:50,340 --> 00:02:52,980
+I'm going to go ahead and copy it anyways in case yours is not.
+
+45
+00:02:53,040 --> 00:02:58,140
+So it should be and over inside of Roboam Mongo we can paste it inside of the user name field.
+
+46
+00:02:59,020 --> 00:03:04,370
+The last field to copy is the password that exists over inside of the connection string between the
+
+47
+00:03:04,400 --> 00:03:06,930
+colon and the at symbol.
+
+48
+00:03:06,950 --> 00:03:12,620
+I'm going to copy this pasted inside of Roboam mango and before we click Save go ahead and click the
+
+49
+00:03:12,620 --> 00:03:17,580
+test button the test button is going to test the connection before you actually save the details.
+
+50
+00:03:17,600 --> 00:03:22,270
+So if something goes wrong you can change it without having to edit the existing connection.
+
+51
+00:03:22,290 --> 00:03:26,230
+Right here we have a couple checkmarks it looks like everything did go as expected.
+
+52
+00:03:26,360 --> 00:03:31,100
+I can close the test save that connection and then we can connect it to the database by double clicking
+
+53
+00:03:31,100 --> 00:03:31,680
+it.
+
+54
+00:03:31,750 --> 00:03:39,780
+Now over in the left hand side we have our local Mongo database and we have our Heroku to do API database.
+
+55
+00:03:39,890 --> 00:03:45,590
+I can open up the individual database go into collections and inside of here we have a dues collection.
+
+56
+00:03:45,590 --> 00:03:47,310
+This has some really old data.
+
+57
+00:03:47,420 --> 00:03:50,800
+So I'm going to go ahead and drop this now.
+
+58
+00:03:50,910 --> 00:03:54,530
+We have our database with no collections and no documents.
+
+59
+00:03:54,540 --> 00:03:56,070
+This means that we are good to go.
+
+60
+00:03:56,130 --> 00:04:00,170
+We can deploy to Heroku and everything should work as expected.
+
+61
+00:04:00,180 --> 00:04:04,350
+Now things are only going to work as expected because we have all our environment variables configured
+
+62
+00:04:04,560 --> 00:04:06,710
+including the database you are l n d j.
+
+63
+00:04:06,740 --> 00:04:07,530
+W T.
+
+64
+00:04:07,530 --> 00:04:08,160
+Secret.
+
+65
+00:04:08,280 --> 00:04:15,180
+If you do not have the JWT secret configured from the last video this call is not going to work as expected.
+
+66
+00:04:15,180 --> 00:04:19,400
+Make sure to have a value right here just like we set up previously.
+
+67
+00:04:19,560 --> 00:04:24,430
+With this in place though I can run get status to confirm I have no changes that need to be committed
+
+68
+00:04:24,690 --> 00:04:30,440
+and I can run get push Heroku master to deploy to Heroku.
+
+69
+00:04:30,510 --> 00:04:35,970
+This is going to take about 15 seconds after it actually finishes it'll take about another 15 seconds
+
+70
+00:04:35,970 --> 00:04:40,860
+to get the service started but once it's up and running we can play around with it inside of post man
+
+71
+00:04:40,860 --> 00:04:43,610
+making sure everything works as expected.
+
+72
+00:04:43,620 --> 00:04:45,860
+Right here we are verifying the deploy.
+
+73
+00:04:45,960 --> 00:04:49,270
+Everything looks like it went well and we're back at the terminal.
+
+74
+00:04:49,480 --> 00:04:51,060
+Let's go ahead and test things out.
+
+75
+00:04:51,060 --> 00:04:52,830
+Over inside of postmen.
+
+76
+00:04:53,040 --> 00:05:00,210
+Now over inside of postman we need to switch from to do app local to do app Heroku But once we do we
+
+77
+00:05:00,210 --> 00:05:02,900
+can make any of the requests we previously set up.
+
+78
+00:05:02,910 --> 00:05:05,240
+I'm going to get started by creating a user.
+
+79
+00:05:05,400 --> 00:05:09,070
+We can make the user with the default data since no users exist.
+
+80
+00:05:09,120 --> 00:05:14,660
+I can send this off and down below we get a 200 and we can see the user was indeed created.
+
+81
+00:05:14,670 --> 00:05:17,260
+We also get our X auth headers sitting right here.
+
+82
+00:05:17,280 --> 00:05:22,840
+I can go ahead and grab this added to my clipboard and we can make some secure requests.
+
+83
+00:05:22,840 --> 00:05:27,940
+For example getting the user who's currently logged in I'm going to go ahead and provide the header
+
+84
+00:05:27,940 --> 00:05:34,600
+value as the X auth header send off the request and in the response body what do we get back we get
+
+85
+00:05:34,600 --> 00:05:37,540
+back the ID and the email as expected.
+
+86
+00:05:37,540 --> 00:05:41,440
+Now let's go ahead and manage some to do's using the production API.
+
+87
+00:05:41,440 --> 00:05:47,200
+We're going to set the X off Hetter equal to the value of the token.
+
+88
+00:05:47,220 --> 00:05:50,630
+I have some body data already set up so I can go ahead and send off this one.
+
+89
+00:05:50,630 --> 00:05:52,670
+And down below we have our to do item.
+
+90
+00:05:52,710 --> 00:05:54,520
+I'm going to make a second one as well.
+
+91
+00:05:56,000 --> 00:05:57,500
+Eat some food.
+
+92
+00:05:57,500 --> 00:05:59,630
+Not that I need to remind myself to do this.
+
+93
+00:05:59,690 --> 00:06:03,950
+I can send that off and now we have to do's inside of the database.
+
+94
+00:06:03,980 --> 00:06:09,530
+I'm going to make a get to do is call next to confirm that I need to do's were indeed added to the database
+
+95
+00:06:09,960 --> 00:06:11,220
+at the South Hetter.
+
+96
+00:06:11,300 --> 00:06:14,500
+Send this one off and down below we get our call back.
+
+97
+00:06:14,600 --> 00:06:20,690
+We have a 200 status code which is great and we have the two to do items we just created.
+
+98
+00:06:20,690 --> 00:06:23,590
+From here we can go ahead and play around with a few other routes.
+
+99
+00:06:23,630 --> 00:06:28,090
+I'm going to take this first to do and I'm going to try to update it using patch.
+
+100
+00:06:28,190 --> 00:06:34,480
+I can go into patch I can update the body setting completed to true and setting the text equal to nothing.
+
+101
+00:06:34,480 --> 00:06:41,290
+I'm not going to update the text then I can update the ID inside of the you R-AL and I can grab the
+
+102
+00:06:41,290 --> 00:06:49,030
+X header value from one of the previous requests headers X off I'm going to grab that old value move
+
+103
+00:06:49,030 --> 00:06:51,830
+into the patch call and add it right here.
+
+104
+00:06:52,620 --> 00:06:53,470
+There we go.
+
+105
+00:06:53,490 --> 00:06:57,840
+Now we're updating one of the to do is we just created were properly logged in and all we're doing is
+
+106
+00:06:57,840 --> 00:07:00,070
+toggling it from false to true.
+
+107
+00:07:00,210 --> 00:07:05,120
+If I send this off down below we get back the new to do we see that completed is equal to true.
+
+108
+00:07:05,220 --> 00:07:10,070
+And we now have a completed at time stamp as well which is fantastic.
+
+109
+00:07:10,140 --> 00:07:15,330
+Last up let's tried to delete the to do item and make sure that works also.
+
+110
+00:07:15,630 --> 00:07:17,400
+I'm going to go ahead and grab the ID.
+
+111
+00:07:17,490 --> 00:07:25,180
+Open up the Delete to do call paste the ID right in here then we can go ahead and grab the X off Hetter
+
+112
+00:07:25,240 --> 00:07:29,140
+from one of the previous requests.
+
+113
+00:07:29,260 --> 00:07:34,450
+I'm going to paste that into the headers Section X hyphen off putting it right here.
+
+114
+00:07:34,510 --> 00:07:39,940
+We can send this one and we get a 200 back with our to do that to do that just got removed.
+
+115
+00:07:40,060 --> 00:07:45,430
+If we now go back to the old get to do is request and rerun it down below we should see we just have
+
+116
+00:07:45,430 --> 00:07:47,650
+1 to do item in place.
+
+117
+00:07:47,800 --> 00:07:49,610
+Last up let's log out.
+
+118
+00:07:49,870 --> 00:07:52,800
+I'm going to grab the south Hetter we've been using all along.
+
+119
+00:07:52,870 --> 00:08:01,270
+Head to the delete users me token call pass in the proper token value send that off and we get a 200.
+
+120
+00:08:01,270 --> 00:08:05,840
+Now if we try to make any of the previous calls like get to do's we're going to get a 401.
+
+121
+00:08:05,880 --> 00:08:10,680
+Unauthorized and that is because we have logged out destroying that token.
+
+122
+00:08:10,720 --> 00:08:14,180
+Now all of this was also updated inside of robo Mongo.
+
+123
+00:08:14,260 --> 00:08:20,060
+If I refreshed that connection and open up the collections list you can now see we have the two dues
+
+124
+00:08:20,060 --> 00:08:25,010
+collection and the users collection and inside of there we have all the appropriate data.
+
+125
+00:08:25,010 --> 00:08:30,530
+We have our user sitting right here and the password is successfully hashed using the crypt and inside
+
+126
+00:08:30,530 --> 00:08:32,190
+of the to do's collection.
+
+127
+00:08:32,270 --> 00:08:37,250
+We have our document with our one to do item now though we have this in place.
+
+128
+00:08:37,250 --> 00:08:40,590
+We are done with the to do application.
+
+129
+00:08:40,610 --> 00:08:46,040
+I hope you had a good time setting up this API learning how to create and test end points setting up
+
+130
+00:08:46,070 --> 00:08:52,970
+mongoose and Mongo D-B managing configuration using POST man and Roboam mango until it was a lot in
+
+131
+00:08:52,970 --> 00:08:54,290
+the last two sections.
+
+132
+00:08:54,320 --> 00:09:00,980
+But this is one of the most real world node app examples I've created applications so similar to this
+
+133
+00:09:00,980 --> 00:09:02,120
+for clients.
+
+134
+00:09:02,120 --> 00:09:03,980
+Obviously it wasn't meant to do API.
+
+135
+00:09:03,980 --> 00:09:05,450
+It was to manage something else.
+
+136
+00:09:05,540 --> 00:09:07,760
+But the techniques are identical.
+
+137
+00:09:07,790 --> 00:09:15,470
+I used the exact same tool sets when creating those apps including Heroku for deploying my applications.
+
+138
+00:09:15,470 --> 00:09:20,660
+Now we are done but I am going to run into the terminal and for sanity's sake run get status one more
+
+139
+00:09:20,660 --> 00:09:23,960
+time just to make sure no files were changed.
+
+140
+00:09:23,960 --> 00:09:25,180
+We can see none were.
+
+141
+00:09:25,190 --> 00:09:26,790
+So that is it.
+
+142
+00:09:26,810 --> 00:09:30,620
+That's it for this section it's also it for the to do API.
+
+143
+00:09:30,620 --> 00:09:34,290
+Once again thanks for joining me I will see you in the next section.
+
+144
+00:09:34,310 --> 00:09:35,260
+Stay tuned.
+

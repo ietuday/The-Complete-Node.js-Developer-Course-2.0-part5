@@ -1,0 +1,608 @@
+﻿1
+00:00:00,270 --> 00:00:04,330
+In this video you are going to learn some advanced post-match techniques.
+
+2
+00:00:04,350 --> 00:00:08,850
+Now if you're anything like me that last video probably drove you mad.
+
+3
+00:00:08,910 --> 00:00:12,650
+We were copying around x values and to do IDs.
+
+4
+00:00:12,660 --> 00:00:14,730
+It's a real cumbersome process.
+
+5
+00:00:14,730 --> 00:00:16,610
+There is a better way to do things.
+
+6
+00:00:16,680 --> 00:00:22,600
+But we're going to do instead is use environment variables when we issue sign up or log in requests.
+
+7
+00:00:22,680 --> 00:00:26,610
+We're going to grab that X off Hetter and set it equal to an environment variable.
+
+8
+00:00:26,610 --> 00:00:32,820
+So instead of having to update every x auth header for every request we can simply provide the environment
+
+9
+00:00:32,850 --> 00:00:37,580
+variable and it's automatically going to get updated as we log in with a new account.
+
+10
+00:00:37,650 --> 00:00:43,830
+The South environment variable will get updated and we can use it in any of the other requests.
+
+11
+00:00:43,850 --> 00:00:48,510
+Now in order to get that done and explain exactly how it's going to work I am going to close all of
+
+12
+00:00:48,510 --> 00:00:51,060
+my tabs not saving any of them.
+
+13
+00:00:51,880 --> 00:00:56,400
+And we're going to get started by updating the sign up call.
+
+14
+00:00:56,520 --> 00:00:59,830
+Now the sign of call is going to get an x auth token back.
+
+15
+00:00:59,850 --> 00:01:03,780
+This is going to come back like it has for all of our other requests.
+
+16
+00:01:03,780 --> 00:01:07,400
+I'm going to create a user Andrew 10 out example dot com.
+
+17
+00:01:07,500 --> 00:01:13,470
+Right here we get our head back and this is what we want to set as the value for the environment variable
+
+18
+00:01:13,560 --> 00:01:14,220
+and postman.
+
+19
+00:01:14,230 --> 00:01:20,220
+It gives us a way to do that to do that we're going to go into this tests section the tests section
+
+20
+00:01:20,460 --> 00:01:24,940
+is a little place where we can run some code after a request comes back.
+
+21
+00:01:25,080 --> 00:01:28,680
+You could use this to verify that the request worked as expected.
+
+22
+00:01:28,680 --> 00:01:31,590
+In our case we have a test suite that does that for us.
+
+23
+00:01:31,590 --> 00:01:37,540
+Instead we're going to use this little test text area to manage some environment variables.
+
+24
+00:01:37,560 --> 00:01:42,390
+Now on the right hand side postman has a fantastic set of snippets to get you started.
+
+25
+00:01:42,390 --> 00:01:44,900
+What we're going to do is write two lines.
+
+26
+00:01:45,030 --> 00:01:51,510
+We're going to write two lines that one fetch the token and to set the token equal to an environment
+
+27
+00:01:51,600 --> 00:01:52,710
+variable.
+
+28
+00:01:52,710 --> 00:01:58,680
+Now currently our to do app Heroku environment has one environment variable depending on the version
+
+29
+00:01:58,680 --> 00:02:03,960
+of Postman you can do that by either going here and clicking manage environments or in my case simply
+
+30
+00:02:03,960 --> 00:02:06,080
+clicking this little preview icon.
+
+31
+00:02:06,150 --> 00:02:11,820
+One of these three things should be the location for your version of postman right here I have the you
+
+32
+00:02:11,820 --> 00:02:13,220
+are an environment variable.
+
+33
+00:02:13,210 --> 00:02:16,460
+What we're going to do is add an X off environment variable.
+
+34
+00:02:16,470 --> 00:02:21,960
+Now first up we're going to make a variable called token setting and equal to the response hador we
+
+35
+00:02:21,960 --> 00:02:27,300
+can get that using POST man and post man which is an object has a bunch of awesome utility methods we
+
+36
+00:02:27,300 --> 00:02:32,070
+can use to manipulate things inside of our tests text area.
+
+37
+00:02:32,130 --> 00:02:39,530
+We're going to use the get response Hetter method get response Haueter takes the name of the header
+
+38
+00:02:39,560 --> 00:02:41,020
+whose value you want to fetch.
+
+39
+00:02:41,030 --> 00:02:46,430
+We're going to fetch the X off Hetter value and then we're going to go ahead and set the environment
+
+40
+00:02:46,460 --> 00:02:46,970
+variable.
+
+41
+00:02:46,970 --> 00:02:51,470
+Using postman datt set environment
+
+42
+00:02:54,090 --> 00:03:00,050
+variable passing into arguments the first one is the name of the environment variable to set.
+
+43
+00:03:00,060 --> 00:03:05,100
+I'm going to call mine x off which matches up with the header name and the second is the value you want
+
+44
+00:03:05,100 --> 00:03:05,700
+to set.
+
+45
+00:03:05,730 --> 00:03:08,940
+We have that stored under the token variable.
+
+46
+00:03:09,120 --> 00:03:15,750
+And with this in place we are done we can now save this request and issue it off by creating a new user.
+
+47
+00:03:15,770 --> 00:03:17,680
+I'm going to change 10 to 11.
+
+48
+00:03:17,700 --> 00:03:21,080
+Send this off and when we send it things look pretty similar.
+
+49
+00:03:21,090 --> 00:03:26,100
+We still get our XT off token in the headers and our body still looks correct with a 200 status.
+
+50
+00:03:26,100 --> 00:03:31,780
+The difference now is that inside of our environment we have an X off environment variable.
+
+51
+00:03:31,800 --> 00:03:37,620
+This is the token that just came back which means we can use this elsewhere in our code to make the
+
+52
+00:03:37,620 --> 00:03:45,100
+private requests a lot easier to send off for example get to deuce get to deuce currently fails.
+
+53
+00:03:45,150 --> 00:03:47,280
+It is going to require an X header.
+
+54
+00:03:47,310 --> 00:03:50,360
+Previously we had to copy that value every time.
+
+55
+00:03:50,370 --> 00:03:56,490
+Instead we can simply reference the environment variable opening and closing two sets of curly braces
+
+56
+00:03:56,730 --> 00:03:59,670
+and putting the environment variable name right inside.
+
+57
+00:03:59,670 --> 00:04:05,730
+Now we can issue this request without ever needing to actually copy of value which means we don't need
+
+58
+00:04:05,730 --> 00:04:11,600
+to change the request every time we just click it clicked send and we get the data back.
+
+59
+00:04:11,610 --> 00:04:12,850
+Now this is fantastic.
+
+60
+00:04:12,870 --> 00:04:15,020
+We have this saved to save it again.
+
+61
+00:04:15,150 --> 00:04:16,620
+Updating the abody.
+
+62
+00:04:16,830 --> 00:04:21,360
+Now we can go ahead and copy the exact same two lines to the logon request.
+
+63
+00:04:21,360 --> 00:04:27,260
+Remember both sign up and log in they are both open and get an x auth token back.
+
+64
+00:04:27,340 --> 00:04:34,130
+I'm going to save this one send it off and now we have a new X off value already in the environment.
+
+65
+00:04:34,140 --> 00:04:38,440
+This is the new token value that just came back with this in place.
+
+66
+00:04:38,460 --> 00:04:43,350
+We can now update all of our private requests just like we did to get to dues.
+
+67
+00:04:43,530 --> 00:04:48,350
+Right here we set X off equal to x off we're going to do the same thing for post to do.
+
+68
+00:04:49,770 --> 00:04:54,630
+X hyphen auth is going to equal the X auth environment variable.
+
+69
+00:04:54,750 --> 00:04:56,640
+Then we can save this one.
+
+70
+00:04:56,640 --> 00:05:05,660
+We can move on to get to do by id setting X hyphen off equal to the X auth environment variable.
+
+71
+00:05:05,730 --> 00:05:15,720
+We have the same thing for delete to Doo's down below X auth equals the X environment variable and we're
+
+72
+00:05:15,720 --> 00:05:17,370
+going to keep moving down the list.
+
+73
+00:05:17,370 --> 00:05:26,550
+Patch is up next x off and X off next up after that one is the get users me.
+
+74
+00:05:26,680 --> 00:05:31,060
+This one already has the X header defined I just need to update the value.
+
+75
+00:05:31,060 --> 00:05:35,140
+And finally we have our alag out request right here.
+
+76
+00:05:35,200 --> 00:05:39,430
+We're going to swap out the token value with the X off environment variable.
+
+77
+00:05:39,430 --> 00:05:41,820
+Now we will never need to do that again.
+
+78
+00:05:41,920 --> 00:05:47,860
+Any time we want to make a private request all we do is we click the route we send it off and we get
+
+79
+00:05:47,980 --> 00:05:49,650
+the data back.
+
+80
+00:05:49,660 --> 00:05:51,650
+Now this works great with X auth.
+
+81
+00:05:51,670 --> 00:05:56,980
+I also want to do the exact same thing for the to do de-value we've been passing around.
+
+82
+00:05:57,040 --> 00:06:03,190
+Ideally the default value would just be the last to do created and we can add that functionality by
+
+83
+00:06:03,190 --> 00:06:05,950
+changing the post to Doo's route.
+
+84
+00:06:05,950 --> 00:06:06,190
+Right.
+
+85
+00:06:06,190 --> 00:06:12,370
+Here we have our tests section and what we're going to do is grab the ID from the response body and
+
+86
+00:06:12,370 --> 00:06:17,200
+we're going to set that equal to an environment variable just like we did with X off then we'll be able
+
+87
+00:06:17,200 --> 00:06:23,590
+to use that environment variable inside of the U R L right here inside of post to do what we're going
+
+88
+00:06:23,590 --> 00:06:29,470
+to do first is grab the body by creating a variable called Body and we are going to need to call Jason
+
+89
+00:06:29,680 --> 00:06:35,100
+dot parce to take the adjacent value and convert it into a javascript object.
+
+90
+00:06:35,110 --> 00:06:41,440
+Now postman is going to give you access to the Jasen response via response body.
+
+91
+00:06:41,710 --> 00:06:42,780
+Excellent.
+
+92
+00:06:42,820 --> 00:06:46,720
+Now that we have our body object we can go ahead and call set environment variable.
+
+93
+00:06:46,720 --> 00:06:55,160
+Once again postman daat set environment variable passing in our values.
+
+94
+00:06:55,360 --> 00:07:02,530
+A good name for this one would be to do ID and we're going to set it equal to body dot underscore ID
+
+95
+00:07:02,770 --> 00:07:04,930
+which is where that property is located.
+
+96
+00:07:04,930 --> 00:07:07,870
+Now I can go ahead and save this request and we can fire it off.
+
+97
+00:07:07,960 --> 00:07:12,330
+Take a moment to notice that you do not have to do Id environment variable.
+
+98
+00:07:12,400 --> 00:07:18,250
+When you send it off and you go back to the same screen you now do have to do id variable.
+
+99
+00:07:18,250 --> 00:07:20,980
+It's the exact same ID we have right here.
+
+100
+00:07:20,980 --> 00:07:25,460
+It ends in 4:6 down below and it ends in 4:6 right there.
+
+101
+00:07:25,870 --> 00:07:32,050
+Now we can go ahead and update the to do routes that require an ID by simply taking the ID portion of
+
+102
+00:07:32,050 --> 00:07:38,310
+the U R L and swapping it out for the environment variable to do Id just like this for our get to dues
+
+103
+00:07:38,350 --> 00:07:39,700
+by ID request.
+
+104
+00:07:39,760 --> 00:07:44,680
+I'm going to save it and send it off and right here we get that to do we just created we can also do
+
+105
+00:07:44,680 --> 00:07:45,910
+the same thing for patch.
+
+106
+00:07:45,910 --> 00:07:48,690
+I'm going to update Doley last right here.
+
+107
+00:07:48,730 --> 00:07:55,720
+We're going to swap out the ID with to do Id say that send it off and now we have it to do it where
+
+108
+00:07:55,720 --> 00:08:00,360
+the status is completed and the completed at property has a time stamp.
+
+109
+00:08:00,490 --> 00:08:02,790
+Last up is the delete route.
+
+110
+00:08:02,920 --> 00:08:07,330
+I'm going to swap out the ID with the to do Id environment variable.
+
+111
+00:08:07,330 --> 00:08:09,500
+Save it and send it off.
+
+112
+00:08:09,520 --> 00:08:14,110
+Now the to do has been deleted and we could still issue our other requests but they're not going to
+
+113
+00:08:14,110 --> 00:08:15,290
+work as expected.
+
+114
+00:08:15,340 --> 00:08:19,920
+Here we try to get a to do that was deleted so we get a 4 or 4 but that's fine.
+
+115
+00:08:20,050 --> 00:08:24,330
+We now have a much easier system for managing our requests.
+
+116
+00:08:24,430 --> 00:08:27,400
+And the same thing is going to work locally automatically.
+
+117
+00:08:27,640 --> 00:08:31,070
+I'm going to switch from to do app Heroku to to do app local.
+
+118
+00:08:31,210 --> 00:08:37,060
+I am going to need to start up my server over in the terminal node server forward slash server genius's
+
+119
+00:08:37,120 --> 00:08:38,830
+going to get that server up and running.
+
+120
+00:08:38,950 --> 00:08:41,030
+And inside of a robo Mongo.
+
+121
+00:08:41,100 --> 00:08:46,680
+I'm going to go ahead and wipe the local collections in here we have our to do our database.
+
+122
+00:08:46,750 --> 00:08:47,990
+I can simply drop it.
+
+123
+00:08:48,070 --> 00:08:53,800
+And then we can go into postman and fire off a few requests over inside a post man we'll get started
+
+124
+00:08:53,800 --> 00:08:55,500
+by creating a user.
+
+125
+00:08:55,570 --> 00:09:00,050
+I'm going to create a user and automatically everything is already working as expected.
+
+126
+00:09:00,070 --> 00:09:04,600
+We have our X auth headers sitting right here and we don't need to copy the value from the response
+
+127
+00:09:04,600 --> 00:09:05,100
+header.
+
+128
+00:09:05,140 --> 00:09:10,210
+We can move right to get to Doo's issue that request and we can see we have no to do's that's fine let's
+
+129
+00:09:10,210 --> 00:09:13,290
+go ahead and create one by clicking it and clicking send.
+
+130
+00:09:13,390 --> 00:09:14,650
+Now we have to do.
+
+131
+00:09:14,740 --> 00:09:21,490
+And now the to do id is also populated from here we can go ahead and get the individual to do returning
+
+132
+00:09:21,490 --> 00:09:22,180
+need to do.
+
+133
+00:09:22,190 --> 00:09:26,660
+Based on the environment variable we could update it just like we did for Heroku.
+
+134
+00:09:26,770 --> 00:09:31,190
+We can delete it just like we did for Heroku and we can also manage the user.
+
+135
+00:09:31,510 --> 00:09:37,450
+We can get the user based off of the X auth token and finally to wrap things up we can go ahead and
+
+136
+00:09:37,450 --> 00:09:39,130
+log out the user.
+
+137
+00:09:39,130 --> 00:09:44,080
+Now the private requests are going to fail because the token that's provided the one that's still in
+
+138
+00:09:44,080 --> 00:09:47,020
+the environment variable has been wiped from the database.
+
+139
+00:09:47,050 --> 00:09:48,510
+So we're going to get a 401.
+
+140
+00:09:48,610 --> 00:09:49,610
+On authorized.
+
+141
+00:09:49,750 --> 00:09:55,720
+Now we did the same thing for loggin loggin is also going to set an X auth token which means if we loggin
+
+142
+00:09:56,020 --> 00:10:03,910
+with a proper body the current body is Andrew an example dotcom but the user I created was Andrew 11.
+
+143
+00:10:04,060 --> 00:10:06,120
+I'm going to go ahead and log in as our new 11.
+
+144
+00:10:06,130 --> 00:10:10,850
+Saving the route now the X out token is properly updated.
+
+145
+00:10:11,050 --> 00:10:16,330
+We can make a request like this and it works as expected with this in place we are done.
+
+146
+00:10:16,330 --> 00:10:22,360
+We have a much better system for managing our routes inside of postman instead of needing to copy around
+
+147
+00:10:22,420 --> 00:10:24,980
+to do Id values and X or tokens.
+
+148
+00:10:25,090 --> 00:10:29,010
+We can simply use environment variables to get the job done.
+
+149
+00:10:29,020 --> 00:10:34,570
+I highly recommend configuring this sort of setup for any API you're going to create down the line.
+
+150
+00:10:34,570 --> 00:10:40,240
+It takes just a few minutes to set up initially but it makes life so much easier when it comes to testing
+
+151
+00:10:40,420 --> 00:10:44,800
+and issuing all of the requests you have saved in your collections.
+
+152
+00:10:44,800 --> 00:10:48,560
+That is it for the bonus video I will see you in the next section.
+

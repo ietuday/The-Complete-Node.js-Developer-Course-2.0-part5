@@ -1,0 +1,1136 @@
+﻿1
+00:00:00,560 --> 00:00:05,530
+In this video you're going to learn how to turn your express routes into private routes.
+
+2
+00:00:05,540 --> 00:00:08,250
+This means that will require an X off tokin.
+
+3
+00:00:08,330 --> 00:00:13,400
+We're going to validate that tokin we're going to find the user associated with that token then and
+
+4
+00:00:13,400 --> 00:00:16,610
+only then will you actually be able to run the route code.
+
+5
+00:00:16,610 --> 00:00:18,870
+Now we're going to be making a lot of routes private.
+
+6
+00:00:18,890 --> 00:00:23,690
+So what I want to do is make it as easy as possible to take a route like this one and turn it into a
+
+7
+00:00:23,690 --> 00:00:25,440
+private route to do that.
+
+8
+00:00:25,460 --> 00:00:30,240
+We're going to add some express middleware that does all of that validation and verification for us.
+
+9
+00:00:30,350 --> 00:00:34,270
+That's going to make it dead simple to turn any one of our routes into a private route.
+
+10
+00:00:34,280 --> 00:00:36,990
+Obviously we will have public routes like the sign up line.
+
+11
+00:00:37,070 --> 00:00:38,530
+It doesn't make sense to make this private.
+
+12
+00:00:38,530 --> 00:00:40,760
+Otherwise no one could ever sign up.
+
+13
+00:00:40,790 --> 00:00:45,460
+Now to illustrate exactly how this is going to work we're going to make a brand new route an app and
+
+14
+00:00:45,460 --> 00:00:46,640
+dots get to route.
+
+15
+00:00:46,790 --> 00:00:53,000
+We'll use the HTP get method to access this one in the U R L is going to be forward slash users forward
+
+16
+00:00:53,000 --> 00:00:54,250
+slash me.
+
+17
+00:00:54,320 --> 00:00:59,210
+This route is going to require authentication which means you're going to need to provide a valid X
+
+18
+00:00:59,210 --> 00:01:00,200
+auth token.
+
+19
+00:01:00,200 --> 00:01:05,270
+It's going to find the associated user and it's going to send that user back much like we send the user
+
+20
+00:01:05,270 --> 00:01:08,460
+back up above sending back the ID and e-mail.
+
+21
+00:01:08,480 --> 00:01:12,710
+This will be our very first private route and then we'll take the lessons learned here to make some
+
+22
+00:01:12,710 --> 00:01:17,450
+middleware so we can easily turn all of the routes above into private routes.
+
+23
+00:01:17,480 --> 00:01:22,220
+The first thing we need to do is specify our callback function where we get the request and response
+
+24
+00:01:22,430 --> 00:01:29,440
+objects and inside of here we're going to start by grabbing the token we can make a variable called
+
+25
+00:01:29,480 --> 00:01:35,360
+token and we can set it equal to the return result from request dot hatter.
+
+26
+00:01:35,470 --> 00:01:41,430
+Now Everquest is pretty similar to response dot Hetter response that lets us set a header.
+
+27
+00:01:41,510 --> 00:01:45,260
+So it takes the key value request header is getting the value.
+
+28
+00:01:45,290 --> 00:01:51,010
+So we only need to pass in that key the X off header variable is the value we want to fetch.
+
+29
+00:01:51,020 --> 00:01:56,570
+Now we'll have that inside of Tokin and we can go ahead and actually verify that token fetch the user
+
+30
+00:01:56,570 --> 00:01:58,330
+and do something with it.
+
+31
+00:01:58,340 --> 00:02:01,340
+Now once again this is going to be code we use in multiple places.
+
+32
+00:02:01,340 --> 00:02:07,640
+So we're going to turn it to our user schema and create a model method the model method is going to
+
+33
+00:02:07,640 --> 00:02:16,100
+be accessed via uppercase user and it's going to be called Find a by token find by token is going to
+
+34
+00:02:16,100 --> 00:02:21,530
+take the token value and it's going to find the appropriate user related to that token returning it
+
+35
+00:02:21,770 --> 00:02:24,170
+inside of your promise callbacks.
+
+36
+00:02:24,170 --> 00:02:30,120
+This means we'll be able to do something with the document of the user associated with the token.
+
+37
+00:02:30,170 --> 00:02:35,900
+Now in order to get started down this path we obviously need to define this model method over inside
+
+38
+00:02:35,900 --> 00:02:37,050
+of user dot.
+
+39
+00:02:37,190 --> 00:02:42,550
+And that's what we're going to do first down below and below our generate auth token method.
+
+40
+00:02:42,560 --> 00:02:44,720
+We're going to define our model method.
+
+41
+00:02:44,720 --> 00:02:50,780
+This one gets created by calling users schema but instead of accessing dot methods we're going to access
+
+42
+00:02:50,850 --> 00:02:56,600
+ADOT statics dot statics as an object kind of like methods although everything you add onto it turns
+
+43
+00:02:56,600 --> 00:03:00,220
+into a model method as opposed to an instance method.
+
+44
+00:03:00,440 --> 00:03:08,990
+Right here I'm going to set the statics property find by token now find by token is going to be a regular
+
+45
+00:03:08,990 --> 00:03:14,360
+function using the function keyword because once again we do need access to this binding.
+
+46
+00:03:14,480 --> 00:03:20,000
+And unlike our other methods it's also going to take an argument it's going to take that token now that
+
+47
+00:03:20,000 --> 00:03:25,550
+we have the token we can go through the process of verifying it finding the associated user and returning
+
+48
+00:03:25,550 --> 00:03:26,270
+it.
+
+49
+00:03:26,300 --> 00:03:32,920
+The first thing I'm going to do is create a variable called user with an upper case you and set it equal
+
+50
+00:03:32,950 --> 00:03:39,760
+to this instance methods get called with the individual document model methods get called with the model
+
+51
+00:03:39,790 --> 00:03:40,260
+as the.
+
+52
+00:03:40,270 --> 00:03:48,210
+This binding now that we have our User variable in place we can make a variable called Decoded Decoded
+
+53
+00:03:48,230 --> 00:03:54,250
+which I'm going to set to undefine for the moment is going to store the decoded JWT values.
+
+54
+00:03:54,250 --> 00:04:00,640
+This is going to be the return result from JWT to verify which we used over and hashing dot J ass right
+
+55
+00:04:00,640 --> 00:04:01,280
+here.
+
+56
+00:04:01,280 --> 00:04:05,130
+I'm creating an undefined variable and I'll tell you why in just a second.
+
+57
+00:04:05,380 --> 00:04:13,000
+The reason why is because the JWT varify function is going to throw an error if anything goes wrong.
+
+58
+00:04:13,150 --> 00:04:18,930
+If the secret doesn't match the secret the token was created with or if the token value was manipulated.
+
+59
+00:04:19,090 --> 00:04:23,400
+That means we want to be able to catch this error and do something with it to do that.
+
+60
+00:04:23,440 --> 00:04:30,340
+We're going to use a try catch block that's a try block followed by the cache keyword which gets called
+
+61
+00:04:30,340 --> 00:04:34,920
+with this error arguments and we have the catch block right here.
+
+62
+00:04:34,930 --> 00:04:39,240
+Now if you haven't use try catch blocks they're pretty great if any errors happen in the try block.
+
+63
+00:04:39,250 --> 00:04:43,050
+The code automatically stops execution and moves into the catch block.
+
+64
+00:04:43,120 --> 00:04:46,860
+It lets you run some code there then it continues on with your program.
+
+65
+00:04:46,870 --> 00:04:50,690
+In our case the code that we want to test is JWT.
+
+66
+00:04:50,820 --> 00:04:51,650
+Verify.
+
+67
+00:04:51,760 --> 00:04:54,190
+We want to see if this throws an error.
+
+68
+00:04:54,190 --> 00:05:00,220
+Now are going to set the result equal to the decoded variable and we're going to pass in our two arguments.
+
+69
+00:05:00,220 --> 00:05:04,910
+The actual token we want to decode and the secret.
+
+70
+00:05:04,930 --> 00:05:07,910
+Now once again the secret is currently stored in the code.
+
+71
+00:05:07,990 --> 00:05:11,920
+We'll be changing that later but for now we can simply pass in the exact same value.
+
+72
+00:05:11,920 --> 00:05:13,890
+ABC 1 2 3.
+
+73
+00:05:13,930 --> 00:05:16,000
+Just like this.
+
+74
+00:05:16,000 --> 00:05:20,050
+Now if this fails we're obviously going to add something into catch but we're going to do that in a
+
+75
+00:05:20,050 --> 00:05:20,730
+little bit.
+
+76
+00:05:20,740 --> 00:05:24,280
+For now I want to move on to what happens in the success case.
+
+77
+00:05:24,280 --> 00:05:30,190
+If we are able to successfully decode the token that was passed in as the header we are going to call
+
+78
+00:05:30,430 --> 00:05:35,570
+user and not find one to find the associated user if any.
+
+79
+00:05:35,590 --> 00:05:40,650
+Now this is going to return a promise and we are going to return that in order to add some chaining.
+
+80
+00:05:40,660 --> 00:05:45,320
+That means we can add a then call on to find by token over in server.
+
+81
+00:05:45,340 --> 00:05:47,200
+J.S. Right here.
+
+82
+00:05:47,200 --> 00:05:51,880
+We're going to call find one with our query and for the first time we're going to need to query our
+
+83
+00:05:51,880 --> 00:05:55,900
+nested object properties inside of tokens.
+
+84
+00:05:55,900 --> 00:05:56,790
+We have an array.
+
+85
+00:05:56,830 --> 00:06:02,710
+We have a token an access property we need to find users whose values match the ones that we have right
+
+86
+00:06:02,710 --> 00:06:03,220
+here.
+
+87
+00:06:03,220 --> 00:06:05,050
+The first one we're looking for is the ID.
+
+88
+00:06:05,050 --> 00:06:06,150
+Nothing new there.
+
+89
+00:06:06,190 --> 00:06:13,150
+We're looking for a user where the underscore ID property equals the one inside of Decoded decoded underscore
+
+90
+00:06:13,210 --> 00:06:14,430
+ID.
+
+91
+00:06:14,440 --> 00:06:20,950
+Next up we need to find a user whose tokens array has an object where the token property equals the
+
+92
+00:06:20,950 --> 00:06:25,400
+token property we have right here to query a nested document.
+
+93
+00:06:25,420 --> 00:06:32,530
+What we're going to do is wrap our value in quotes and then we're going to specify tokens dot token.
+
+94
+00:06:32,530 --> 00:06:34,360
+This lets us query that value.
+
+95
+00:06:34,360 --> 00:06:38,360
+We want to find one where it's equal to the token argument passed in above.
+
+96
+00:06:38,500 --> 00:06:41,340
+And we're going to do the exact same thing for access.
+
+97
+00:06:41,380 --> 00:06:49,240
+We're looking for a user where in their tokens array the access property is set to off.
+
+98
+00:06:49,250 --> 00:06:53,780
+Now off is going to be the string there is no Auth. variable saw wrap it in quotes.
+
+99
+00:06:53,780 --> 00:06:57,740
+Now to keep things consistent I am going to wrap this idea in quotes as well.
+
+100
+00:06:57,770 --> 00:07:02,310
+You don't need to do that but sense quotes are required when we have a dot in the value.
+
+101
+00:07:02,390 --> 00:07:05,580
+I need them here so I might as well use them up above.
+
+102
+00:07:05,600 --> 00:07:10,340
+Now with this in place are fine by token method has its success case handled.
+
+103
+00:07:10,400 --> 00:07:13,290
+We still haven't handled any errors but that's fine for the moment.
+
+104
+00:07:13,340 --> 00:07:15,360
+We can continue on inside of server.
+
+105
+00:07:15,360 --> 00:07:17,010
+J.S. Right here.
+
+106
+00:07:17,120 --> 00:07:23,320
+I'm going to tack on a then call back this callback is going to get called with the user.
+
+107
+00:07:23,330 --> 00:07:26,050
+It might be Knol if there is no user that passed the query.
+
+108
+00:07:26,060 --> 00:07:28,350
+So we'll have to check for that as well.
+
+109
+00:07:28,610 --> 00:07:29,630
+If there is no user
+
+110
+00:07:32,840 --> 00:07:35,510
+We're going to do something and we're going to do that in just a moment.
+
+111
+00:07:35,510 --> 00:07:39,170
+For now we're going to stick with that happy path on the happy path.
+
+112
+00:07:39,170 --> 00:07:42,860
+The last thing we do is we respond with the user.
+
+113
+00:07:42,860 --> 00:07:47,950
+That means I'm going to call response send passing in the user document.
+
+114
+00:07:47,960 --> 00:07:53,450
+Now obviously the call is not complete but we can go ahead and save both of these files and it should
+
+115
+00:07:53,450 --> 00:07:57,620
+work if we pass in a valid X auth token and that's all we care about.
+
+116
+00:07:57,620 --> 00:08:03,200
+For the moment over inside of robo Mongo I'm going to go ahead and wipe my databases since I have a
+
+117
+00:08:03,200 --> 00:08:04,730
+lot of weird data.
+
+118
+00:08:04,820 --> 00:08:11,330
+I'm going to refresh the connection take the to do app database and simply drop it.
+
+119
+00:08:11,390 --> 00:08:18,060
+Now over inside the terminal I can start up the server node server server J.S. and I can move into post
+
+120
+00:08:18,070 --> 00:08:22,070
+man to create a user over inside of postman.
+
+121
+00:08:22,190 --> 00:08:27,530
+I'm going to make a post user's request using the default data where the email is and you're at example
+
+122
+00:08:27,530 --> 00:08:28,380
+dot com.
+
+123
+00:08:28,580 --> 00:08:31,750
+I'm going to send out this request and everything works as expected.
+
+124
+00:08:31,880 --> 00:08:34,970
+We got our user back and we get our Hetter value.
+
+125
+00:08:34,970 --> 00:08:40,300
+Now I'm going to go ahead and copy this X off hetter value because we need to use it for our next request.
+
+126
+00:08:40,450 --> 00:08:44,930
+It's going require me to go to the right and make sure I grab the entire thing not just the visible
+
+127
+00:08:44,930 --> 00:08:45,620
+part.
+
+128
+00:08:45,620 --> 00:08:49,970
+Now I can go ahead and make a separate request by creating a new tab.
+
+129
+00:08:49,970 --> 00:08:52,830
+This one is going to be to the environment variable.
+
+130
+00:08:52,850 --> 00:08:55,000
+You Arel like all the other ones are.
+
+131
+00:08:55,100 --> 00:08:59,650
+And the you R-AL is forward slash user's forward slash meet.
+
+132
+00:08:59,780 --> 00:09:04,550
+Now this call is going to fail if we don't pass a token because we haven't set up the error handler
+
+133
+00:09:04,550 --> 00:09:05,640
+just yet.
+
+134
+00:09:05,690 --> 00:09:13,400
+So I am going to provide the x value and the tab will set X hyphen Auth. equal to the value we just
+
+135
+00:09:13,400 --> 00:09:15,430
+copied from the response.
+
+136
+00:09:15,510 --> 00:09:17,150
+Then I can go ahead and send this off.
+
+137
+00:09:17,150 --> 00:09:18,170
+And what do we get.
+
+138
+00:09:18,170 --> 00:09:22,340
+We get our user back and this is fantastic.
+
+139
+00:09:22,480 --> 00:09:28,820
+We get users me route requires an X off value it's not going to work if you don't provide one.
+
+140
+00:09:28,820 --> 00:09:31,590
+Now obviously we provided a valid token here.
+
+141
+00:09:31,700 --> 00:09:34,700
+Let's go ahead and write some code that makes things work.
+
+142
+00:09:34,730 --> 00:09:39,810
+When the token is valid over inside of atom we're going to kick things off in user.
+
+143
+00:09:39,830 --> 00:09:45,440
+J.S. Right here in this catch block we're going to do is return a promise that's always going to reject
+
+144
+00:09:45,610 --> 00:09:50,260
+it this code runs we never want this code to run right here.
+
+145
+00:09:50,290 --> 00:09:57,000
+I am going to return a new promise then we're going to pass in our function.
+
+146
+00:09:57,020 --> 00:10:02,280
+Remember the promise gets called with resolve and reject.
+
+147
+00:10:02,460 --> 00:10:07,380
+This can be an arrow function and inside of here all I'm going to do is call reject.
+
+148
+00:10:07,380 --> 00:10:10,710
+This means that this promise will get returned from fine by tokin.
+
+149
+00:10:10,860 --> 00:10:12,970
+Then over inside of server it'll get rejected.
+
+150
+00:10:13,050 --> 00:10:19,470
+So our then success case will never fire the catch call back window so we can add one right here.
+
+151
+00:10:19,530 --> 00:10:22,770
+An attack on a catch callback it'll get called with some error.
+
+152
+00:10:22,980 --> 00:10:28,770
+And this is where we'll have that code now inside of the catch call back all we're going to do is send
+
+153
+00:10:28,770 --> 00:10:30,090
+back a 401.
+
+154
+00:10:30,090 --> 00:10:34,860
+Status the 401 status means authentication is required if we get an error.
+
+155
+00:10:34,890 --> 00:10:37,690
+That means clearly they didn't authenticate correctly.
+
+156
+00:10:37,710 --> 00:10:45,390
+We can do that using response ADOT status setting the status equal to 4 0 1 and sending back an empty
+
+157
+00:10:45,510 --> 00:10:46,650
+body.
+
+158
+00:10:46,740 --> 00:10:50,420
+Now inside of user J s this code can actually be simplified.
+
+159
+00:10:50,580 --> 00:10:53,990
+Instead of returning a new promise then rejecting it right away.
+
+160
+00:10:54,220 --> 00:11:01,380
+We can actually return promise dot reject this does the exact same thing only it is a heck of a lot
+
+161
+00:11:01,380 --> 00:11:02,120
+simpler.
+
+162
+00:11:02,130 --> 00:11:09,270
+I could also pass in a value if I want to reject with some value that value would get used as the argument
+
+163
+00:11:09,330 --> 00:11:10,440
+right here.
+
+164
+00:11:11,100 --> 00:11:14,110
+Now over inside of user we are going to stick with this reject method.
+
+165
+00:11:14,220 --> 00:11:19,020
+I'm going to go ahead and remove the commented out code the much longer version and there we go find
+
+166
+00:11:19,020 --> 00:11:22,670
+by tokened is officially complete inside of server.
+
+167
+00:11:22,670 --> 00:11:25,210
+Yes we still have one case that we need to fix.
+
+168
+00:11:25,350 --> 00:11:30,930
+If there is no user This means there is a valid token but for some reason the query could not find a
+
+169
+00:11:30,930 --> 00:11:34,090
+document that matched the parameters we specified.
+
+170
+00:11:34,170 --> 00:11:36,720
+In that case we want to respond with the exact same thing.
+
+171
+00:11:36,810 --> 00:11:38,760
+We want to send back a 401.
+
+172
+00:11:39,090 --> 00:11:43,300
+Now we could go ahead and use response dot status with the 401.
+
+173
+00:11:43,320 --> 00:11:44,830
+And send back an empty body.
+
+174
+00:11:44,880 --> 00:11:47,280
+But that's the exact same thing we have down below.
+
+175
+00:11:47,280 --> 00:11:54,870
+A better technique would be to return promise not reject just like we did in the other file.
+
+176
+00:11:54,870 --> 00:11:57,010
+Now the function is automatically going to stop.
+
+177
+00:11:57,030 --> 00:11:58,980
+So this code will never get executed.
+
+178
+00:11:58,980 --> 00:12:01,520
+We're going to run the error case and we're going to send back a 4.
+
+179
+00:12:01,520 --> 00:12:04,970
+0 1 which is exactly what we want with this in place.
+
+180
+00:12:04,980 --> 00:12:07,800
+We can now test that our new code is working.
+
+181
+00:12:07,800 --> 00:12:11,360
+I'm going to go ahead and save both files over inside of the terminal.
+
+182
+00:12:11,380 --> 00:12:16,560
+Give things a restart and inside of postman we can now make the exact same request.
+
+183
+00:12:17,440 --> 00:12:18,280
+It's valid.
+
+184
+00:12:18,280 --> 00:12:19,570
+Let's go ahead and change it.
+
+185
+00:12:19,600 --> 00:12:22,630
+I'm going to change the e to and send it off.
+
+186
+00:12:22,720 --> 00:12:24,510
+And what do we get we get our 401.
+
+187
+00:12:24,550 --> 00:12:25,780
+Unauthorized.
+
+188
+00:12:25,780 --> 00:12:29,550
+I can also remove X off altogether send that off.
+
+189
+00:12:29,590 --> 00:12:30,940
+And we also get a 401.
+
+190
+00:12:30,960 --> 00:12:31,750
+On authorized.
+
+191
+00:12:31,750 --> 00:12:34,270
+Which is fantastic.
+
+192
+00:12:34,270 --> 00:12:37,330
+Now this call is going to be something we use over and over again.
+
+193
+00:12:37,360 --> 00:12:44,790
+So I am going to set off equal to the string test and I'll save it in my to do app collection.
+
+194
+00:12:44,790 --> 00:12:49,990
+I'm going to use Save As I'll change the request name to get users.
+
+195
+00:12:49,990 --> 00:12:56,250
+Me and I'm going to save it to our existing to do app collection so we can fire it off much quicker
+
+196
+00:12:56,340 --> 00:12:57,690
+later on.
+
+197
+00:12:57,690 --> 00:13:03,990
+Now that we have our one route privatized we want to break out this code into some middleware.
+
+198
+00:13:03,990 --> 00:13:09,090
+So all of our routes can take advantage of it without having to actually run all of these function calls
+
+199
+00:13:09,390 --> 00:13:09,990
+for the moment.
+
+200
+00:13:09,990 --> 00:13:15,030
+We're going to define our middleware function right here although it will be moved into its own file.
+
+201
+00:13:15,030 --> 00:13:20,430
+We can make a function we can call it authenticate and this is going to be the middleware function that
+
+202
+00:13:20,430 --> 00:13:22,770
+we use on our routes to make them private.
+
+203
+00:13:22,770 --> 00:13:28,290
+Now if you remember from the middleware section we get three arguments the request the response and
+
+204
+00:13:28,350 --> 00:13:33,820
+next the actual route is not going to run until next gets called inside of the middleware.
+
+205
+00:13:34,110 --> 00:13:37,870
+Then we can tack on the rest of the Aero function and we can get started.
+
+206
+00:13:38,040 --> 00:13:42,010
+Now this function is actually going to look really really similar to the one we have down below.
+
+207
+00:13:42,120 --> 00:13:48,650
+So I'm going to take it copy it and paste it inside of authenticate making just a few changes.
+
+208
+00:13:48,660 --> 00:13:50,550
+Now we do still want to grab the token value.
+
+209
+00:13:50,550 --> 00:13:55,280
+This line is perfectly fine and we do still want to find the user by tokin.
+
+210
+00:13:55,410 --> 00:14:00,570
+Next up we do still want to reject if there is an error but right here instead of sending back the user
+
+211
+00:14:00,570 --> 00:14:04,020
+what we're going to do is modify the request object.
+
+212
+00:14:04,020 --> 00:14:10,440
+This means that we'll be able to use the modified request object inside of the route down below to add
+
+213
+00:14:10,440 --> 00:14:16,020
+the middleware will simply reference the function right here and now this route will be using the middleware
+
+214
+00:14:16,020 --> 00:14:17,440
+defined up above.
+
+215
+00:14:17,700 --> 00:14:25,020
+Instead of sending back a response we're going to set request dot user equal to the user We just found.
+
+216
+00:14:25,080 --> 00:14:31,410
+And we're also going to request a dot token equal to the token up above.
+
+217
+00:14:31,410 --> 00:14:37,250
+Now that we have a request modified we're going to able to use that data by accessing it right here.
+
+218
+00:14:37,560 --> 00:14:43,350
+This means that what we can do down below is remove all of this code and simply call response send sending
+
+219
+00:14:43,350 --> 00:14:48,000
+back the user which is available on request dot user.
+
+220
+00:14:48,000 --> 00:14:52,170
+Now right here after we modify the request object we do need to call next.
+
+221
+00:14:52,290 --> 00:14:56,420
+Otherwise the code down below in this function will never actually execute.
+
+222
+00:14:56,460 --> 00:14:59,230
+Right here we are still going to send back a 401.
+
+223
+00:14:59,370 --> 00:15:02,180
+If anything goes wrong we do want to respond.
+
+224
+00:15:02,220 --> 00:15:05,240
+And we're not calling next because we don't want to run this code.
+
+225
+00:15:05,310 --> 00:15:08,880
+If the authentication didn't work as expected.
+
+226
+00:15:08,880 --> 00:15:13,350
+Now that we have this in place we have the exact same functionality only we have it in a really reusable
+
+227
+00:15:13,350 --> 00:15:14,040
+function.
+
+228
+00:15:14,250 --> 00:15:18,850
+I'm going to go ahead and break this out into its own folder and file inside of server.
+
+229
+00:15:18,870 --> 00:15:20,350
+We'll make a new directory.
+
+230
+00:15:20,550 --> 00:15:28,270
+I'm going to call this new directory middleware and inside of middleware we'll make a file called authenticate
+
+231
+00:15:30,170 --> 00:15:32,850
+J.S. and all we're going to have an authenticator.
+
+232
+00:15:32,870 --> 00:15:35,250
+J S is our middleware function.
+
+233
+00:15:35,300 --> 00:15:40,910
+I'm going to cut it out a server J paste paste inside of here and now all we need to do is import the
+
+234
+00:15:40,910 --> 00:15:41,450
+user.
+
+235
+00:15:41,460 --> 00:15:47,690
+Since that is not currently accessible inside of this file I'm going to make a variable that variable
+
+236
+00:15:47,690 --> 00:15:52,100
+will pull off user from the return value just like we did earlier.
+
+237
+00:15:52,340 --> 00:15:54,150
+Then we're going to have a relative path.
+
+238
+00:15:54,230 --> 00:15:56,360
+We need to go up a directory.
+
+239
+00:15:56,810 --> 00:16:02,180
+Then we're going to go into the models directory and we're going to grab that user file models spelled
+
+240
+00:16:02,210 --> 00:16:02,910
+incorrectly.
+
+241
+00:16:02,930 --> 00:16:04,680
+M o d e l.
+
+242
+00:16:04,730 --> 00:16:06,380
+That's excellent.
+
+243
+00:16:06,380 --> 00:16:10,640
+Now we have our imports in place the last thing to do is export authenticate.
+
+244
+00:16:10,640 --> 00:16:17,570
+I'm going to set module exports equal to an object and that object will simply authenticate equal to
+
+245
+00:16:17,570 --> 00:16:21,020
+the authenticate variable defined above.
+
+246
+00:16:21,020 --> 00:16:23,270
+Now that are authenticate file is complete.
+
+247
+00:16:23,270 --> 00:16:29,540
+We can load it in in server JSA and access the middleware just like we have right here up above at the
+
+248
+00:16:29,540 --> 00:16:31,620
+very top of the file we can get this done.
+
+249
+00:16:31,730 --> 00:16:35,130
+I'm going to do it just below where we have our user inport.
+
+250
+00:16:35,150 --> 00:16:37,010
+We're going to make a variable.
+
+251
+00:16:37,340 --> 00:16:44,180
+We're going to pull off authenticate then we're going to require it using the relative path we need
+
+252
+00:16:44,180 --> 00:16:47,060
+to go into that middleware directory that we just created.
+
+253
+00:16:47,180 --> 00:16:53,330
+And we're going to grab the authenticate file leaving off the JS extension now that we have the authenticate
+
+254
+00:16:53,330 --> 00:16:59,450
+variable imported it is going to be used right here and they get route for fetching the currently authenticated
+
+255
+00:16:59,450 --> 00:17:02,040
+user will work just as it did before.
+
+256
+00:17:02,240 --> 00:17:07,160
+I'm going to go ahead and save all of my files restart things over in the terminal and make one final
+
+257
+00:17:07,160 --> 00:17:11,030
+request in postman to verify everything works.
+
+258
+00:17:11,030 --> 00:17:14,830
+Now I am going to need to create a new user since I lost access to that token.
+
+259
+00:17:14,870 --> 00:17:16,910
+Actually I think it is still sitting over here.
+
+260
+00:17:16,910 --> 00:17:17,820
+Perfect.
+
+261
+00:17:17,840 --> 00:17:22,400
+I'm going to grab the old token from the other tab if you don't have it you can always sign up a new
+
+262
+00:17:22,400 --> 00:17:29,030
+user that I'm going to go to get users me paste it in here and send off my request we get to 200 and
+
+263
+00:17:29,030 --> 00:17:35,450
+we get the user object which means everything is working as expected when the token gets processed it
+
+264
+00:17:35,450 --> 00:17:38,570
+properly calls it the actual route handler.
+
+265
+00:17:38,690 --> 00:17:42,340
+We get the request user right here and we send it back.
+
+266
+00:17:42,380 --> 00:17:46,630
+Now if the token is a bad value I'm going to delete some keys and we send that off.
+
+267
+00:17:46,640 --> 00:17:51,380
+We're still getting the correct errors so everything is looking great now that we have this in place
+
+268
+00:17:51,380 --> 00:17:55,230
+we have our first private route which is just fantastic.
+
+269
+00:17:55,250 --> 00:17:59,250
+I'm going to wrap this video up by making a comment to save our changes.
+
+270
+00:17:59,330 --> 00:18:02,020
+Let's shut down the server and run it get status.
+
+271
+00:18:02,030 --> 00:18:04,160
+Here we have our modified user file.
+
+272
+00:18:04,160 --> 00:18:06,980
+The server file and our new middleware file.
+
+273
+00:18:06,980 --> 00:18:12,770
+I can use get added to add all of those to the next commit that I can use and get commit with the flag
+
+274
+00:18:12,770 --> 00:18:17,580
+to make the commit ad get users.
+
+275
+00:18:17,690 --> 00:18:20,560
+Me and authentication middleware
+
+276
+00:18:24,020 --> 00:18:25,100
+and there we go.
+
+277
+00:18:25,100 --> 00:18:26,380
+I'm going to push that up to get help.
+
+278
+00:18:26,390 --> 00:18:28,060
+And we are done.
+
+279
+00:18:28,190 --> 00:18:31,080
+We've made some really good progress towards authentication.
+
+280
+00:18:31,100 --> 00:18:36,020
+We all have a way to generate tokens and we have a way to verify those tokens creating private routes
+
+281
+00:18:36,350 --> 00:18:40,400
+in the next video we're going to continue on working through authentication.
+
+282
+00:18:40,400 --> 00:18:41,840
+I'm super excited to get to it.
+
+283
+00:18:41,840 --> 00:18:42,860
+So stay tuned.
+
+284
+00:18:42,860 --> 00:18:44,580
+I will see you next time
+

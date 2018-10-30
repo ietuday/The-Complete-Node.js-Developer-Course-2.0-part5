@@ -1,0 +1,424 @@
+﻿1
+00:00:00,580 --> 00:00:04,980
+Now that you have your log out route in place it's time to go ahead and test this by adding a new describe
+
+2
+00:00:05,040 --> 00:00:07,720
+black at the very bottom of our server test file.
+
+3
+00:00:07,720 --> 00:00:10,600
+We're going to verify that when we send a cross a token.
+
+4
+00:00:10,600 --> 00:00:16,730
+It does indeed get removed from the user's collection over at the bottom of server test.
+
+5
+00:00:16,810 --> 00:00:21,140
+Yes we can out our final describe block for our final route.
+
+6
+00:00:21,790 --> 00:00:24,500
+We're going to call the scrod passing in the route signature.
+
+7
+00:00:24,670 --> 00:00:31,420
+It's a delete route and the you are Alice forward slash users forward slash me forward slash token exactly
+
+8
+00:00:31,450 --> 00:00:33,430
+as we have it right here.
+
+9
+00:00:33,430 --> 00:00:37,570
+Next up we can add our function and then here we're going to add one test case that you're going to
+
+10
+00:00:37,570 --> 00:00:40,410
+be responsible for filling out this test case.
+
+11
+00:00:40,470 --> 00:00:45,940
+It's going to make sure that when a real valid X or token gets passed across to the log out method it
+
+12
+00:00:45,970 --> 00:00:48,940
+actually does get logged out.
+
+13
+00:00:48,970 --> 00:00:55,570
+It should remove auth token on log out.
+
+14
+00:00:55,600 --> 00:01:00,250
+This is going to be an asynchronous function so I'll specify done right here and to get this done.
+
+15
+00:01:00,250 --> 00:01:05,080
+We're going to need some seed data and we actually already have some good data in our database for this
+
+16
+00:01:05,080 --> 00:01:06,670
+test case right here.
+
+17
+00:01:06,670 --> 00:01:11,800
+Our first user they already have a tokens array which means that we can just grab this token value.
+
+18
+00:01:11,830 --> 00:01:14,000
+Use this as our X auth token.
+
+19
+00:01:14,110 --> 00:01:19,570
+Then after the fact we can make sure that the database was updated and that the tokens array has a length
+
+20
+00:01:19,630 --> 00:01:20,610
+of 0.
+
+21
+00:01:20,650 --> 00:01:28,860
+To summarize the first thing you're going to do is make a delete request to the users me token.
+
+22
+00:01:29,060 --> 00:01:35,770
+You're also going to set X off equal to token.
+
+23
+00:01:35,800 --> 00:01:39,520
+This is going to be the token inside of the tokens array right here.
+
+24
+00:01:39,850 --> 00:01:41,870
+Then you're going to go ahead and make some assertions.
+
+25
+00:01:42,040 --> 00:01:46,840
+You're going to expect that you get a 200 back then you're going to add an asynchronous and call like
+
+26
+00:01:46,840 --> 00:01:53,200
+we do here to make an asynchronous assertion here you're going to find a user in the database find user
+
+27
+00:01:53,680 --> 00:02:01,790
+and you're going to verify that tokens are has a length of 0.
+
+28
+00:02:01,840 --> 00:02:05,890
+Once you have all of this in place you can go ahead and run the test suite from the terminal and you
+
+29
+00:02:05,890 --> 00:02:08,680
+should see a new test showing up and it should be passing.
+
+30
+00:02:08,680 --> 00:02:13,390
+Feel free to use Google or anything we've done in this course including the current file to get this
+
+31
+00:02:13,390 --> 00:02:14,100
+done.
+
+32
+00:02:14,110 --> 00:02:16,090
+We have done everything you need to do here.
+
+33
+00:02:16,150 --> 00:02:18,770
+Up above somewhere in the server test file.
+
+34
+00:02:18,940 --> 00:02:19,690
+Pause the video.
+
+35
+00:02:19,690 --> 00:02:22,430
+Knock this out and when you're done click play.
+
+36
+00:02:24,420 --> 00:02:25,080
+How'd you do.
+
+37
+00:02:25,080 --> 00:02:28,650
+Hopefully you were able to get that done without too much trouble to get started.
+
+38
+00:02:28,650 --> 00:02:33,930
+We are going to be making a request to our application and this is going to be a delete request so I
+
+39
+00:02:33,930 --> 00:02:39,880
+will call the delete method now the route for this one is going to be a regular out there is no need
+
+40
+00:02:39,880 --> 00:02:45,880
+to inject any u r l parameters so we can use a regular string and specify it forward slash users forward
+
+41
+00:02:45,880 --> 00:02:48,580
+slash me forward slash token.
+
+42
+00:02:48,610 --> 00:02:53,320
+Now the next thing that we need to do is set the X auth header because remember this route is not only
+
+43
+00:02:53,320 --> 00:02:59,620
+private but it uses that token as the token to delete right here inside of the server test file we can
+
+44
+00:02:59,620 --> 00:03:05,780
+use set as we've done previously to set X off equal to the value we want to use.
+
+45
+00:03:05,890 --> 00:03:09,880
+Now in our case we do want to use that user's seed token value.
+
+46
+00:03:09,880 --> 00:03:15,350
+We're going to grab the first user then we'll grab the first token let's go into the user's array and
+
+47
+00:03:15,350 --> 00:03:20,870
+grab the very first user then we're going to access the tokens array property grabbing the first token.
+
+48
+00:03:20,870 --> 00:03:25,960
+And finally we're going to access the actual token value with this in place.
+
+49
+00:03:26,000 --> 00:03:32,710
+We're actually done making the request and now we can start making our expectations and assertions first.
+
+50
+00:03:32,990 --> 00:03:40,380
+We're going to expect that we get a 200 back then we're going to add a custom call back to end like
+
+51
+00:03:40,380 --> 00:03:45,300
+we've done before we'll specify the error and response arguments and inside of here the first thing
+
+52
+00:03:45,300 --> 00:03:51,970
+we'll do as always is handle the error if there is any error from the assertions above all we're going
+
+53
+00:03:51,970 --> 00:03:56,850
+to do is return Garling done passing the error to the done function.
+
+54
+00:03:56,850 --> 00:04:02,010
+Now we can make our custom assertion which means that we're going to want to query the database first
+
+55
+00:04:02,010 --> 00:04:09,840
+up I'm going to use user and not find a by ID then I'm going to pass the ID in of the first user which
+
+56
+00:04:09,840 --> 00:04:11,890
+I have access to the users.
+
+57
+00:04:12,160 --> 00:04:16,320
+Going to grab the first user and I'm going to access the D property.
+
+58
+00:04:16,380 --> 00:04:21,510
+Next up we can go ahead and add are called to then so we can do something when that user comes back
+
+59
+00:04:21,990 --> 00:04:22,710
+right here.
+
+60
+00:04:22,710 --> 00:04:27,960
+I'll add my function where we get that the user document and we can make our assertion about what's
+
+61
+00:04:27,960 --> 00:04:29,630
+inside of the database.
+
+62
+00:04:29,640 --> 00:04:34,080
+Now in this case the only thing we're going to assert is that the user tokens array has a length of
+
+63
+00:04:34,080 --> 00:04:35,000
+zero.
+
+64
+00:04:35,200 --> 00:04:45,180
+Expect user ADOT tokens ADOT length to be 0.
+
+65
+00:04:45,180 --> 00:04:49,800
+Now that we have our one assertion in place we can go ahead and call done wrapping up the test suite
+
+66
+00:04:50,100 --> 00:04:54,240
+and I can add a call to catch to catch any errors that might occur.
+
+67
+00:04:54,420 --> 00:05:01,050
+Printing them to the screen correctly right here we're going to call done passing in the error argument.
+
+68
+00:05:01,050 --> 00:05:05,310
+With this in place I'm going to go ahead and remove the comments up above and we can go ahead and run
+
+69
+00:05:05,310 --> 00:05:08,170
+the test suite from the terminal by running.
+
+70
+00:05:08,170 --> 00:05:09,910
+NPM test.
+
+71
+00:05:10,020 --> 00:05:15,270
+Now once you get to the very bottom of our test file we should see our delete token out and the test
+
+72
+00:05:15,270 --> 00:05:16,980
+case should be passing.
+
+73
+00:05:17,100 --> 00:05:22,680
+If it is we are all done testing our routes and we can move on to start the integration right here where
+
+74
+00:05:22,770 --> 00:05:28,310
+we create users route here's our delete route and the test case is indeed passing.
+
+75
+00:05:28,320 --> 00:05:30,030
+We're expecting the length to be zero.
+
+76
+00:05:30,150 --> 00:05:36,330
+If the length wasn't zero for example if it was one the test case would indeed fail because the value
+
+77
+00:05:36,330 --> 00:05:41,360
+that we expect does not equal the value actually inside of the database.
+
+78
+00:05:41,400 --> 00:05:47,730
+Now that we are done we can go ahead and wrap this video up by making a commit to save our changes right
+
+79
+00:05:47,730 --> 00:05:49,990
+here inside of the terminal in just a second.
+
+80
+00:05:50,040 --> 00:05:51,710
+We're going to see the test case fails.
+
+81
+00:05:51,870 --> 00:05:55,780
+I'm going to revert that change and now we can go ahead and make it commit.
+
+82
+00:05:56,070 --> 00:06:01,940
+I'm going to use clear to clear the terminal output and run get status to see the changes we have here.
+
+83
+00:06:01,980 --> 00:06:04,330
+We just have changes to our server test.
+
+84
+00:06:04,350 --> 00:06:05,750
+J.S. fine.
+
+85
+00:06:05,940 --> 00:06:12,300
+Now aside from using a GUI like source tree which is a graphic user interface for managing get we can
+
+86
+00:06:12,300 --> 00:06:14,550
+always run get diff.
+
+87
+00:06:14,610 --> 00:06:17,280
+And this is going to let us see the changes to the file.
+
+88
+00:06:17,280 --> 00:06:21,900
+Here you can see we have a lot of green lines which means these are additions to the repository.
+
+89
+00:06:21,930 --> 00:06:23,230
+And what do we have in green.
+
+90
+00:06:23,250 --> 00:06:28,950
+The code we wrote in this video everything looks great which means that we can make it commit get commit
+
+91
+00:06:28,950 --> 00:06:29,770
+with the.
+
+92
+00:06:29,920 --> 00:06:32,820
+And the flag or the combined am flag.
+
+93
+00:06:32,910 --> 00:06:34,870
+Both do the exact same thing.
+
+94
+00:06:35,130 --> 00:06:44,110
+And you can message for this one as add tests for delete forward slash users forward slash me forward
+
+95
+00:06:44,170 --> 00:06:45,600
+slash tokin.
+
+96
+00:06:45,760 --> 00:06:48,680
+With this in place I can make the commit and push it up to get help.
+
+97
+00:06:48,700 --> 00:06:52,510
+And we are done in the next couple of videos.
+
+98
+00:06:52,510 --> 00:06:55,470
+We're going to be integrating the users and to do it together.
+
+99
+00:06:55,480 --> 00:07:01,150
+So when you created to do the user ID is associated with that to do and only that user can manage that
+
+100
+00:07:01,150 --> 00:07:01,740
+to do.
+
+101
+00:07:01,810 --> 00:07:06,830
+Currently inside of server J.S. all of the to do related routes are still public.
+
+102
+00:07:06,880 --> 00:07:10,630
+They don't require authentication and we don't care who created that to do.
+
+103
+00:07:10,660 --> 00:07:12,620
+We're simply going to return it regardless.
+
+104
+00:07:12,640 --> 00:07:13,810
+All of that is getting fixed.
+
+105
+00:07:13,810 --> 00:07:15,520
+Coming up next so stay tuned.
+
+106
+00:07:15,520 --> 00:07:17,280
+I will see you next time.
+

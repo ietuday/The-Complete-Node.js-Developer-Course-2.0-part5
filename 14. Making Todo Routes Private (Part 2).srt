@@ -1,0 +1,1000 @@
+﻿1
+00:00:00,540 --> 00:00:06,480
+In the last video you converted two out of the five to do routes to be private in this video we're going
+
+2
+00:00:06,480 --> 00:00:08,130
+to convert the final three.
+
+3
+00:00:08,280 --> 00:00:11,430
+The GET BY idea out the delete by id route.
+
+4
+00:00:11,430 --> 00:00:14,160
+And finally the patch by id route.
+
+5
+00:00:14,160 --> 00:00:17,880
+Now the process for converting these is going to be really similar to what we did above.
+
+6
+00:00:17,880 --> 00:00:19,960
+We're going to add yet to Kate middleware.
+
+7
+00:00:20,130 --> 00:00:24,930
+We're going to update our query to take advantage of the new creator property and finally we'll be updating
+
+8
+00:00:24,930 --> 00:00:26,300
+the test cases.
+
+9
+00:00:26,370 --> 00:00:30,660
+We're going to convert the first two routes together the get and delete route.
+
+10
+00:00:30,660 --> 00:00:35,900
+And your challenge for the video is going to be to convert the third the patch route.
+
+11
+00:00:35,940 --> 00:00:40,550
+Now before we dive into any of this we are going to need to update these seed data a little bit.
+
+12
+00:00:40,560 --> 00:00:45,180
+We're going to be adding an authentication token for this second user and that will become clear a little
+
+13
+00:00:45,180 --> 00:00:47,850
+later as we start updating the test cases.
+
+14
+00:00:47,850 --> 00:00:54,000
+For now though what I'd like you to do is take the seed data file grab the tokens array and copy it
+
+15
+00:00:54,000 --> 00:00:56,640
+down below for the second user.
+
+16
+00:00:56,640 --> 00:00:59,700
+Now we do need to change the ID instead of user one ID.
+
+17
+00:00:59,710 --> 00:01:05,250
+We're going to pass in a user to ID but with this in place we don't have an authentication token for
+
+18
+00:01:05,250 --> 00:01:10,000
+both users and we're going to need that in order to fill out the test suite.
+
+19
+00:01:10,110 --> 00:01:13,260
+Now by making this change we've actually broken some test cases.
+
+20
+00:01:13,260 --> 00:01:17,870
+We can figure out which ones we've broken and fix them by running NPM test.
+
+21
+00:01:17,910 --> 00:01:23,190
+It's just a few small changes but it is going to be important to make these changes as well as adding
+
+22
+00:01:23,190 --> 00:01:25,730
+and betokens array over inside of CDATA.
+
+23
+00:01:25,740 --> 00:01:26,300
+Yes.
+
+24
+00:01:26,460 --> 00:01:30,920
+Right here you can see the two tests that are failing are the Post users log in.
+
+25
+00:01:30,930 --> 00:01:37,500
+Tests should log in a user and return off token fails and should reject invalid loggin fails.
+
+26
+00:01:37,560 --> 00:01:42,900
+We can head over to the server test file move to the bottom where these test cases live and we'll be
+
+27
+00:01:42,900 --> 00:01:48,600
+able to make the changes necessary to get everything running right here we have our describe a block
+
+28
+00:01:48,630 --> 00:01:51,100
+further out post users log in.
+
+29
+00:01:51,150 --> 00:01:56,580
+In this case we log in with the second user and we make some assertions about the tokens array down
+
+30
+00:01:56,580 --> 00:01:57,210
+below.
+
+31
+00:01:57,360 --> 00:02:02,610
+We're asserting that the first item in the tokens array equals the new token we just got back as the
+
+32
+00:02:02,610 --> 00:02:04,670
+response had it but that's not the case anymore.
+
+33
+00:02:04,680 --> 00:02:06,810
+It's now going to be the second item in the array.
+
+34
+00:02:06,870 --> 00:02:11,640
+So I'm going to put one right here inside of brackets as opposed to zero.
+
+35
+00:02:11,640 --> 00:02:13,310
+This is going to fix this test case.
+
+36
+00:02:13,320 --> 00:02:16,120
+It will now pass for the test case down below.
+
+37
+00:02:16,170 --> 00:02:20,790
+We have a similar problem this time around we log in with an invalid password.
+
+38
+00:02:20,880 --> 00:02:27,180
+We expect to 400 and we expect no token to exist later on we check the tokens right expecting the length
+
+39
+00:02:27,180 --> 00:02:28,010
+to be zero.
+
+40
+00:02:28,140 --> 00:02:34,200
+But in reality it should now be one if a token was added the length would be to be logged in invalidly.
+
+41
+00:02:34,200 --> 00:02:39,810
+So it shouldn't be changed the default length should still exist and the default length goes from 0
+
+42
+00:02:39,810 --> 00:02:45,480
+to 1 because we've added this item now that we have that in place though we can rerun the test suite
+
+43
+00:02:45,510 --> 00:02:48,060
+and all of our tests should be passing.
+
+44
+00:02:48,060 --> 00:02:54,650
+This means that we can finally get started converting those three routes over inside of Adam and we're
+
+45
+00:02:54,650 --> 00:03:00,380
+going to go into the server js file and we're going to make some changes to this get by id route step
+
+46
+00:03:00,380 --> 00:03:03,560
+1 of 3 is adding the authenticate middleware.
+
+47
+00:03:03,560 --> 00:03:07,670
+This is going to make sure our user is logged in and is going to give us access to the user and the
+
+48
+00:03:07,670 --> 00:03:10,190
+token via the request object.
+
+49
+00:03:10,190 --> 00:03:16,810
+Next up we're going to need to make a change to our query here we call find by id thatching the to do.
+
+50
+00:03:16,850 --> 00:03:18,730
+Whose idea was provided in the r.
+
+51
+00:03:18,740 --> 00:03:20,810
+But this is no longer going to be acceptable.
+
+52
+00:03:20,810 --> 00:03:27,230
+Currently a user who is logged in could access someone else's to do all that has to do is specify the
+
+53
+00:03:27,230 --> 00:03:28,370
+ID right here.
+
+54
+00:03:28,490 --> 00:03:31,780
+They would indeed get logged in even though they don't own that to do.
+
+55
+00:03:31,780 --> 00:03:34,270
+They wouldn't be able to fetch it and see that data.
+
+56
+00:03:34,400 --> 00:03:41,870
+We're going to do instead is change fine by ID to find one then instead of just querying by ID we're
+
+57
+00:03:41,870 --> 00:03:48,650
+going to query by id and by the Creator property right here we're going to make sure underscore ID equals
+
+58
+00:03:48,650 --> 00:03:55,910
+the ID variable and we're going to make sure creator equals the user's ID the user who's currently logged
+
+59
+00:03:55,910 --> 00:03:58,820
+in request a user a dot underscore.
+
+60
+00:03:58,840 --> 00:04:04,610
+I did with this in place we can save the file move into the server test file and scroll up to the appropriate
+
+61
+00:04:04,610 --> 00:04:08,380
+descry block for that route up near the top of the file.
+
+62
+00:04:08,450 --> 00:04:13,310
+We're looking for the route for fetching a to do by ID we had that right here and we're going to need
+
+63
+00:04:13,310 --> 00:04:16,040
+to update these three test cases.
+
+64
+00:04:16,040 --> 00:04:21,710
+First up I am going to be grabbing the X auth token line from a test case up above since it will be
+
+65
+00:04:21,710 --> 00:04:26,950
+using that right here for the first one should return a to do dock.
+
+66
+00:04:26,960 --> 00:04:32,990
+Now the idea we're passing in is the first to Doo's ID and we know that the first to do is owned by
+
+67
+00:04:32,990 --> 00:04:37,660
+the first user we specify that right here which means over inside of server test.
+
+68
+00:04:37,780 --> 00:04:40,710
+Yes we can paste the line in as is here.
+
+69
+00:04:40,730 --> 00:04:44,420
+We provide the token for the first user which is the owner of the to do.
+
+70
+00:04:44,420 --> 00:04:48,890
+We're trying to fetch which means that we should get a two hundred and our assertion down below should
+
+71
+00:04:48,890 --> 00:04:50,000
+also pass.
+
+72
+00:04:50,000 --> 00:04:53,430
+Next up try to return a 404 If no to do.
+
+73
+00:04:53,450 --> 00:04:59,280
+Found in this case we can go ahead and simply pass in an X off token just like this.
+
+74
+00:04:59,300 --> 00:05:02,450
+This test case does not require any further changes.
+
+75
+00:05:02,480 --> 00:05:07,910
+The idea is still not going to exist and we're still going to get a 404 back for the last test.
+
+76
+00:05:07,910 --> 00:05:09,410
+It's going to go through a similar process.
+
+77
+00:05:09,410 --> 00:05:11,730
+All we need to do is set X off.
+
+78
+00:05:11,810 --> 00:05:13,850
+This idea is not going to exist in the database.
+
+79
+00:05:13,850 --> 00:05:18,750
+It's also not a valid object id which means we will get a 404 back.
+
+80
+00:05:18,770 --> 00:05:21,340
+Now there is one more test case I want to add.
+
+81
+00:05:21,500 --> 00:05:27,860
+I want to verify that if I'm logged in as User 1 I can't fetch a to do owned by user 2 I'm going to
+
+82
+00:05:27,860 --> 00:05:31,030
+go ahead and copy our first test and paste it down below.
+
+83
+00:05:31,190 --> 00:05:39,840
+Instead of it should return it to do Doc I'm going to say it should not return a to do Doc created by
+
+84
+00:05:40,200 --> 00:05:45,360
+other user and this time around we're going to try to fetch the second to do item.
+
+85
+00:05:45,360 --> 00:05:49,740
+We're going to provide the second to do items ID but we're still going to authenticate as the first
+
+86
+00:05:49,740 --> 00:05:52,850
+user which should cause a problem and we should get a 4.
+
+87
+00:05:52,860 --> 00:05:57,320
+0 4 back we can remove our custom expect call right here.
+
+88
+00:05:57,330 --> 00:06:01,830
+We're not going to get any body data back now that we have this in place we can go ahead and rerun our
+
+89
+00:06:01,830 --> 00:06:05,640
+test suite and make sure all of our test cases are passing.
+
+90
+00:06:05,670 --> 00:06:10,320
+We should now have all of our tests passing and get around NPM test to start things up.
+
+91
+00:06:10,320 --> 00:06:15,420
+It's going to go through the entire test suite and if everything is working as expected we can move
+
+92
+00:06:15,420 --> 00:06:17,420
+on to the delete route.
+
+93
+00:06:17,640 --> 00:06:22,050
+Right here you can see the four tests for getting it to do by ID are indeed passing.
+
+94
+00:06:22,050 --> 00:06:29,330
+So now it's time to go back into service dot J S and update the next route the delete route.
+
+95
+00:06:29,370 --> 00:06:31,340
+This is the last one we're going to do together.
+
+96
+00:06:31,500 --> 00:06:36,870
+And the process is going to be very similar the same three steps add the middleware update the query
+
+97
+00:06:37,170 --> 00:06:38,850
+update the test cases.
+
+98
+00:06:38,850 --> 00:06:43,630
+First up the middle where authenticate and second up is the query.
+
+99
+00:06:43,800 --> 00:06:49,700
+Currently we use find by id and remove your member from our mongoose remove file.
+
+100
+00:06:49,710 --> 00:06:52,300
+There's a method called Find one and remove.
+
+101
+00:06:52,320 --> 00:06:54,190
+This is what we want to use.
+
+102
+00:06:54,210 --> 00:06:55,830
+We don't just want to find by ID.
+
+103
+00:06:55,830 --> 00:07:03,590
+We want to find by id and by the Creator which means I'm going to replace by ID with one uppercase.
+
+104
+00:07:04,020 --> 00:07:07,190
+And now we can add our custom query in here.
+
+105
+00:07:07,320 --> 00:07:12,390
+We're going to make sure that the underscore ID equals the ID that was provided in the U R L and we're
+
+106
+00:07:12,390 --> 00:07:16,780
+also going to make sure that the Creator property equals the request.
+
+107
+00:07:16,870 --> 00:07:24,000
+User ID object id with this in place the delete route has been updated and now we can move into the
+
+108
+00:07:24,000 --> 00:07:29,970
+test file to update the test cases over inside of server and test Scott.
+
+109
+00:07:30,010 --> 00:07:32,670
+Yes I'm going to scroll down to the delete route.
+
+110
+00:07:32,670 --> 00:07:35,610
+Here we have that should remove a to do.
+
+111
+00:07:35,850 --> 00:07:39,810
+Now for this test we're trying to remove the second to do.
+
+112
+00:07:39,810 --> 00:07:41,400
+Currently we're not authenticated.
+
+113
+00:07:41,400 --> 00:07:44,890
+So we're going to do is authenticate as the second user.
+
+114
+00:07:45,090 --> 00:07:49,790
+That's going to require us to call the set method setting the X auth header.
+
+115
+00:07:49,800 --> 00:07:54,580
+Now we're going to grab this token from the users array and instead of going to the first user We're
+
+116
+00:07:54,580 --> 00:07:59,520
+going to go to the second user then we're going to go into their tokens array grab the first token and
+
+117
+00:07:59,520 --> 00:08:02,160
+pass in the token attribute.
+
+118
+00:08:02,160 --> 00:08:07,830
+With this in place we're now successfully authenticated as the second to user who does indeed have access
+
+119
+00:08:07,830 --> 00:08:09,090
+to the second to do.
+
+120
+00:08:09,090 --> 00:08:12,770
+Which means that everything down below should still work as expected.
+
+121
+00:08:12,900 --> 00:08:18,180
+The body should still have the ID and it down below when we find that to do we should expect it to not
+
+122
+00:08:18,180 --> 00:08:20,460
+exist because we deleted it.
+
+123
+00:08:20,460 --> 00:08:25,230
+I'm also going to add a second to test case really similar to the first one which verifies that if I
+
+124
+00:08:25,230 --> 00:08:31,220
+try to delete a to do I don't own it doesn't actually get removed I'm going to copy this test case and
+
+125
+00:08:31,220 --> 00:08:34,500
+down below we can paste it right here.
+
+126
+00:08:34,500 --> 00:08:40,350
+We're going to start things off by tweaking the to do we try to delete instead of trying to delete that
+
+127
+00:08:40,350 --> 00:08:41,150
+second to do.
+
+128
+00:08:41,160 --> 00:08:46,250
+We're going to try to delete the first but we're going to do it as the second user which should cause
+
+129
+00:08:46,290 --> 00:08:47,100
+an error.
+
+130
+00:08:47,250 --> 00:08:53,490
+Right here we're going to expect a 4 0 4 back because inside of server J.S. this query this is not going
+
+131
+00:08:53,490 --> 00:08:59,130
+to return any documents which means this if statement is going to run and the 4:4 will get sent back
+
+132
+00:08:59,730 --> 00:09:01,650
+back inside of server test.
+
+133
+00:09:01,710 --> 00:09:06,370
+J.S. we can now go ahead and remove our expectations right here.
+
+134
+00:09:06,600 --> 00:09:11,150
+Although I am going to keep our custom function down below inside of this function.
+
+135
+00:09:11,150 --> 00:09:16,740
+We're going to find the to do by id just like we did earlier but instead of expecting it to not exist
+
+136
+00:09:16,770 --> 00:09:19,680
+we're going to expect it to exist.
+
+137
+00:09:19,680 --> 00:09:23,210
+The deletion should never have happened because I tried to delete or to do.
+
+138
+00:09:23,280 --> 00:09:24,240
+I didn't create.
+
+139
+00:09:24,240 --> 00:09:27,230
+So it should still exist in the database.
+
+140
+00:09:27,240 --> 00:09:32,960
+The last thing we want to do before we run these two test cases is update the two test cases down below.
+
+141
+00:09:32,970 --> 00:09:34,820
+Now these can be done with either user.
+
+142
+00:09:34,830 --> 00:09:41,140
+So all I'm going to do is copy your ex off line right here which provides the second user's token I'm
+
+143
+00:09:41,140 --> 00:09:45,270
+going to paste it in this test and I'll paste it in the test case below.
+
+144
+00:09:45,550 --> 00:09:51,850
+With this in place our delete test suite should now be passing over inside of the terminal we can verify
+
+145
+00:09:51,850 --> 00:09:58,990
+this by rerunning NPM test this time around we should have 21 test cases are 1 Nuwan and everything
+
+146
+00:09:59,050 --> 00:10:00,640
+should be passing.
+
+147
+00:10:00,910 --> 00:10:05,230
+Everything looks good so far we're going into the delete section and all of the Delete to do routes
+
+148
+00:10:05,440 --> 00:10:07,030
+did indeed pass.
+
+149
+00:10:07,030 --> 00:10:08,420
+This is fantastic.
+
+150
+00:10:08,650 --> 00:10:16,480
+With this in place the last thing to do is convert the final route the patch route which updates a to
+
+151
+00:10:16,480 --> 00:10:17,550
+do.
+
+152
+00:10:17,550 --> 00:10:21,910
+Now in order to get this done you're going to have to go through those same three steps you're going
+
+153
+00:10:21,910 --> 00:10:26,170
+to add the authentication middleware you're going to update the query and you're going to update the
+
+154
+00:10:26,170 --> 00:10:31,070
+tests adding the authentication middleware will be the same as it was for every other test case.
+
+155
+00:10:31,150 --> 00:10:32,970
+But the query is going to be a little different.
+
+156
+00:10:33,130 --> 00:10:38,560
+Instead of using a find a by idea an update you're going to need to use the other method to find one
+
+157
+00:10:39,040 --> 00:10:44,950
+and update find a one and update is going to do exactly what you'd expect it's going to return just
+
+158
+00:10:45,010 --> 00:10:50,200
+one item which is exactly what we want you're also going to need to update the query.
+
+159
+00:10:50,200 --> 00:10:52,300
+The query is going to be in that first argument.
+
+160
+00:10:52,300 --> 00:10:53,970
+Currently it's just an idea.
+
+161
+00:10:54,040 --> 00:10:59,410
+We're going to go ahead and set it equal to an object specifying the underscore id property as well
+
+162
+00:10:59,410 --> 00:11:02,710
+as the underscore creator property.
+
+163
+00:11:02,710 --> 00:11:08,890
+Now once you have the server route updated you can go ahead and update the test cases as well down below
+
+164
+00:11:08,890 --> 00:11:10,120
+under the patch section.
+
+165
+00:11:10,150 --> 00:11:14,690
+We have one to test cases both of these are going to need to get updated.
+
+166
+00:11:14,770 --> 00:11:18,510
+And we're also going to add a third right here we have a test.
+
+167
+00:11:18,550 --> 00:11:20,050
+It should update the.
+
+168
+00:11:20,050 --> 00:11:26,400
+To do this tries to update the first to do which means we need to authenticate as the first user.
+
+169
+00:11:26,440 --> 00:11:31,920
+I'll leave a little comment right here off as first user.
+
+170
+00:11:31,940 --> 00:11:35,910
+Now once you authenticate as that first user everything should work as expected.
+
+171
+00:11:35,930 --> 00:11:39,350
+You don't need to change any of the assertions down below.
+
+172
+00:11:39,350 --> 00:11:46,460
+What I'd like you to do then is duplicate the test above duplicate above test and try to update the
+
+173
+00:11:46,460 --> 00:11:56,090
+first to do as the second user tried to update first to do as second user.
+
+174
+00:11:56,250 --> 00:12:00,750
+In this case we should get a 404 back and that's exactly what you're going to assert.
+
+175
+00:12:00,750 --> 00:12:04,120
+Assert 404 response.
+
+176
+00:12:04,350 --> 00:12:05,360
+Excellent.
+
+177
+00:12:05,370 --> 00:12:09,200
+Now once you're done that test case you can move on to the final test case.
+
+178
+00:12:09,270 --> 00:12:12,990
+It should clear completed at when to do is not completed.
+
+179
+00:12:13,170 --> 00:12:18,090
+In this case we are trying to update the second to do which means you can simply authenticate as the
+
+180
+00:12:18,090 --> 00:12:19,380
+second user.
+
+181
+00:12:19,380 --> 00:12:25,230
+You won't need to change anything but adding that X or Hetter all the assertions down below can be exactly
+
+182
+00:12:25,290 --> 00:12:26,240
+the same.
+
+183
+00:12:26,250 --> 00:12:28,300
+So take a moment to knock that out.
+
+184
+00:12:28,380 --> 00:12:33,570
+Feel free to use any of the previous videos or any code you've already written in this project.
+
+185
+00:12:33,570 --> 00:12:36,810
+You can also use Google and stack overflow if you run into any issues.
+
+186
+00:12:36,810 --> 00:12:38,870
+This is what real developers use.
+
+187
+00:12:38,880 --> 00:12:44,400
+I use Google and stack overflow every single day when working on client projects.
+
+188
+00:12:44,400 --> 00:12:46,130
+Take a moment to pause the video.
+
+189
+00:12:46,140 --> 00:12:49,170
+Knock this out rerun the test suite when you're done.
+
+190
+00:12:49,200 --> 00:12:50,970
+Go ahead and play around with post man.
+
+191
+00:12:51,000 --> 00:12:52,990
+Make sure everything works as expected.
+
+192
+00:12:53,010 --> 00:12:58,270
+Then go ahead and click play how to go.
+
+193
+00:12:58,370 --> 00:13:02,750
+I hope you were able to get all of that done and we're going to kick things off over in the server file.
+
+194
+00:13:02,750 --> 00:13:09,690
+By modifying the patch route first up step 1 add authenticate middleware authenticate.
+
+195
+00:13:09,710 --> 00:13:11,000
+Boom done.
+
+196
+00:13:11,000 --> 00:13:15,420
+Next up update the query instead of find by id and update.
+
+197
+00:13:15,440 --> 00:13:18,770
+We're going to use find one and update.
+
+198
+00:13:18,770 --> 00:13:24,080
+This is going to let us provide a custom query where we can specify the two props we've been using for
+
+199
+00:13:24,080 --> 00:13:25,160
+the other routes.
+
+200
+00:13:25,190 --> 00:13:32,660
+The underscore ID Propp equal to the ID up above and the underscore creator property set equal to request
+
+201
+00:13:32,990 --> 00:13:35,180
+dot user dot underscore.
+
+202
+00:13:35,180 --> 00:13:37,140
+I deal with this in place.
+
+203
+00:13:37,140 --> 00:13:41,060
+The route is now complete and we can move on to the test case.
+
+204
+00:13:41,090 --> 00:13:42,680
+I'm going to save the server file.
+
+205
+00:13:42,770 --> 00:13:48,300
+Move over to the server test file and kick things off by updating the first test.
+
+206
+00:13:48,350 --> 00:13:52,130
+All we have to do for this one is authenticate as the first user.
+
+207
+00:13:52,160 --> 00:13:54,790
+I'm going to remove the comment I left as a note.
+
+208
+00:13:54,920 --> 00:13:58,620
+We can grab the X off token example from up above.
+
+209
+00:13:58,630 --> 00:14:04,610
+Paste it here and simply change it to the first user instead of the second one done.
+
+210
+00:14:04,610 --> 00:14:05,750
+That's it for the first test.
+
+211
+00:14:05,750 --> 00:14:10,970
+We can now move on to the second test which we're going to create by duplicating the first going to
+
+212
+00:14:10,970 --> 00:14:14,430
+copy it and we'll go ahead and give it a new name.
+
+213
+00:14:14,450 --> 00:14:21,780
+It should not update that to do created by other user.
+
+214
+00:14:21,990 --> 00:14:25,770
+Now for this test we wanted to authenticate as the second user.
+
+215
+00:14:25,800 --> 00:14:31,410
+I'm going to change this from user 0 to users 1 but we wanted to try to update the first to do a to
+
+216
+00:14:31,410 --> 00:14:36,020
+do that we do not own which means that what we should get back is a 404.
+
+217
+00:14:36,090 --> 00:14:38,130
+Just like I commented below.
+
+218
+00:14:38,400 --> 00:14:45,600
+I'm going to remove the expect call and swap out the 200 for the 404 with this in place are second to
+
+219
+00:14:45,600 --> 00:14:46,880
+test cases done.
+
+220
+00:14:47,040 --> 00:14:49,480
+We can move on to the other ones down below.
+
+221
+00:14:49,740 --> 00:14:55,340
+I'm going to grab a call to set adding it to my clipboard and for this test it should clear completed
+
+222
+00:14:55,350 --> 00:15:01,030
+at when to do is not completed all we need to do is add the author tolk here.
+
+223
+00:15:01,080 --> 00:15:05,900
+We're trying to update the second to do which means I want to authenticate as the second user.
+
+224
+00:15:05,970 --> 00:15:07,760
+I'm going to paste in the call.
+
+225
+00:15:07,830 --> 00:15:12,100
+I already have the second user right here and we are done.
+
+226
+00:15:12,120 --> 00:15:17,880
+There's nothing left to change all we need to do is save the file and rerun the test suite over inside
+
+227
+00:15:17,880 --> 00:15:18,720
+of the terminal.
+
+228
+00:15:18,720 --> 00:15:20,250
+I'm going to rerun the test suite.
+
+229
+00:15:20,250 --> 00:15:25,810
+We should now have 22 passing tests the previous 21 plus our new test.
+
+230
+00:15:25,830 --> 00:15:27,770
+Right here we have the delete tests running.
+
+231
+00:15:27,870 --> 00:15:29,360
+Now we're running our patch tests.
+
+232
+00:15:29,370 --> 00:15:30,290
+We have three.
+
+233
+00:15:30,330 --> 00:15:33,350
+They are passing which is fantastic.
+
+234
+00:15:33,400 --> 00:15:38,900
+And with this in place our users and to do's are associated all of the methods are locked down.
+
+235
+00:15:38,910 --> 00:15:45,050
+There is no way to update delete Thach or create to do's that you don't own.
+
+236
+00:15:45,170 --> 00:15:49,380
+You are gonna need to be logged in for all these requests and you're only going to be able to manage
+
+237
+00:15:49,380 --> 00:15:51,090
+data you have access to.
+
+238
+00:15:51,270 --> 00:15:55,030
+Let's wrap things up by making a commit to save our changes.
+
+239
+00:15:55,030 --> 00:16:00,660
+I'm going around get status and we have our changed files everything looks good here.
+
+240
+00:16:00,740 --> 00:16:09,540
+I can use get commit with the a flag to make a commit associate users with dues.
+
+241
+00:16:09,750 --> 00:16:10,660
+I'm going to make that commit.
+
+242
+00:16:10,660 --> 00:16:11,730
+Push it up to get help.
+
+243
+00:16:11,740 --> 00:16:13,600
+And we are done for this one.
+
+244
+00:16:13,600 --> 00:16:14,950
+There's two more videos left.
+
+245
+00:16:14,950 --> 00:16:20,380
+We're going to be looking at how to properly configure our applications pulling stuff like our secrets
+
+246
+00:16:20,440 --> 00:16:25,360
+out of the code and we're going to apply to her rope you and make sure everything works in the production
+
+247
+00:16:25,360 --> 00:16:27,230
+version of the application.
+
+248
+00:16:27,310 --> 00:16:28,280
+That's all coming up next.
+
+249
+00:16:28,300 --> 00:16:29,180
+So stay tuned.
+
+250
+00:16:29,180 --> 00:16:30,400
+I will see you then
+

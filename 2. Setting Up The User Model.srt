@@ -1,0 +1,1120 @@
+﻿1
+00:00:00,270 --> 00:00:05,700
+In this video to headed down the path towards authentication we're going to be adding the necessary
+
+2
+00:00:05,700 --> 00:00:08,390
+properties to the user model that are currently missing.
+
+3
+00:00:08,430 --> 00:00:14,670
+Currently the user document has only one property an email and the email isn't even validated.
+
+4
+00:00:14,670 --> 00:00:18,220
+We have to make some changes to this one as well as adding a few new ones.
+
+5
+00:00:18,360 --> 00:00:22,440
+Now to show you exactly what a user document is going to look like when we're all done I'm going to
+
+6
+00:00:22,440 --> 00:00:24,550
+make a simple object right here.
+
+7
+00:00:24,660 --> 00:00:28,230
+This is going to be what the doc looks like but you do not need to write this code.
+
+8
+00:00:28,230 --> 00:00:29,990
+I'll be deleting it in just a moment.
+
+9
+00:00:30,000 --> 00:00:32,940
+First up obviously we're going to have that email property.
+
+10
+00:00:32,940 --> 00:00:38,530
+It is going to be validated which means we will require it to look like a real valid e-mail Andrew at
+
+11
+00:00:38,580 --> 00:00:41,920
+example dot com would pass the validation.
+
+12
+00:00:41,940 --> 00:00:46,760
+Next up for signing up and logging in we are going to need a password from the user.
+
+13
+00:00:46,920 --> 00:00:52,130
+So it will set up a password property and the user will send in their password in plain text.
+
+14
+00:00:52,230 --> 00:00:57,230
+If they type my pass one to three my pass one to three is going to come to the server.
+
+15
+00:00:57,420 --> 00:01:00,780
+We're not going to store it in plain text though because that is not secure.
+
+16
+00:01:01,050 --> 00:01:06,090
+If the database gets compromised the person who hacked the database will not have access to the person's
+
+17
+00:01:06,120 --> 00:01:09,380
+e-mail and their plain text password which is a really big problem.
+
+18
+00:01:09,390 --> 00:01:14,370
+Not only could they log into our service but a lot of people use the same password across other services.
+
+19
+00:01:14,430 --> 00:01:18,990
+So they might be able to log in to someone's bank account or other accounts you obviously don't want
+
+20
+00:01:18,990 --> 00:01:20,490
+someone hacking into.
+
+21
+00:01:20,490 --> 00:01:24,660
+This means that we're going to be hashing this password and using the secret algorithm which we'll talk
+
+22
+00:01:24,660 --> 00:01:25,510
+about later.
+
+23
+00:01:25,530 --> 00:01:31,020
+Essentially a one way hash means we take this value and we convert it into a really long string of a
+
+24
+00:01:31,020 --> 00:01:34,020
+fixed length regardless of the value passed in.
+
+25
+00:01:34,020 --> 00:01:36,720
+And this is what we're going to store in the database.
+
+26
+00:01:36,720 --> 00:01:40,770
+It's impossible to get the original value back from the hash value.
+
+27
+00:01:40,770 --> 00:01:46,600
+It is a one way algorithm meaning we can take a value and hash it but we can't on hash value.
+
+28
+00:01:46,680 --> 00:01:48,340
+That's exactly what we want to hear.
+
+29
+00:01:48,360 --> 00:01:51,780
+We never want to be storing our passwords in plain text.
+
+30
+00:01:51,780 --> 00:01:57,530
+Now the last property we're going to be adding is called tokens tokens is actually going to be an array.
+
+31
+00:01:57,690 --> 00:02:02,870
+It's going to be an array of objects where each object is a log in token.
+
+32
+00:02:03,040 --> 00:02:08,190
+Imagine I log in that to do application for my mobile phone and the Web site I'm going to want to have
+
+33
+00:02:08,190 --> 00:02:10,090
+different authentication tokens.
+
+34
+00:02:10,140 --> 00:02:13,500
+And those are going to get stored in the tokens array.
+
+35
+00:02:13,500 --> 00:02:18,510
+Now an individual token is going to look something like this will have an access property that specifies
+
+36
+00:02:18,570 --> 00:02:20,040
+the token type.
+
+37
+00:02:20,070 --> 00:02:24,330
+The only one will be setting up in this course is an authentication token type although you could have
+
+38
+00:02:24,360 --> 00:02:29,460
+other tokens for verifying things like email or resetting passwords.
+
+39
+00:02:29,460 --> 00:02:32,520
+Next up we're going to have the actual token value.
+
+40
+00:02:32,700 --> 00:02:34,660
+This will be stored under the token property.
+
+41
+00:02:34,740 --> 00:02:40,380
+And this is also like the password going to be a really strong cryptographically secure string.
+
+42
+00:02:40,380 --> 00:02:45,350
+This is the string that we're going to pass back and forth when a user wants to make a secure request.
+
+43
+00:02:45,420 --> 00:02:50,700
+They're going to send this along with their request and we'll be able to validate that the user does
+
+44
+00:02:50,700 --> 00:02:56,220
+indeed have access to do what they want to do whether it's deleting a to do adding a to do or updating
+
+45
+00:02:56,400 --> 00:02:57,750
+to do.
+
+46
+00:02:57,750 --> 00:02:59,560
+Now this is that user model we want to create.
+
+47
+00:02:59,560 --> 00:03:01,680
+So let's go ahead and do it down below.
+
+48
+00:03:01,680 --> 00:03:05,010
+First up the e-mail there's a few things we need to change there.
+
+49
+00:03:05,040 --> 00:03:10,200
+The first property we're going to add is a property called unique the unique property which gets set
+
+50
+00:03:10,200 --> 00:03:11,600
+to either true or false.
+
+51
+00:03:11,610 --> 00:03:17,460
+We'll be setting it to true in this case verifies that the property e-mail does not have the same value
+
+52
+00:03:17,460 --> 00:03:19,570
+as any other documents in the collection.
+
+53
+00:03:19,570 --> 00:03:24,720
+And now John I'm signing up for a new account with an e-mail that's already in use it would pass if
+
+54
+00:03:24,720 --> 00:03:27,640
+I had unique set to false which is the default value.
+
+55
+00:03:27,660 --> 00:03:32,760
+But when we set Unique equal to true we won't be able to have two documents in use or collection with
+
+56
+00:03:32,760 --> 00:03:34,830
+the same e-mail and this is a good thing.
+
+57
+00:03:34,830 --> 00:03:39,960
+Next up we're going to add custom e-mail validation we need to verify that the string that got passed
+
+58
+00:03:39,960 --> 00:03:42,050
+in is a valid email.
+
+59
+00:03:42,270 --> 00:03:45,050
+Validating emails is an inherently tricky thing to do.
+
+60
+00:03:45,150 --> 00:03:50,430
+There are a ton of edge cases and work arounds that need to be in place in order for e-mail validation
+
+61
+00:03:50,430 --> 00:03:54,590
+to work in all cases rather than writing and testing this library on our own.
+
+62
+00:03:54,600 --> 00:03:59,180
+We're going to use a validator library that has and is email function.
+
+63
+00:03:59,190 --> 00:04:03,690
+It's a really simple function it is well tested and well used which means that we can guarantee it's
+
+64
+00:04:03,690 --> 00:04:05,740
+going to work for our purposes.
+
+65
+00:04:05,910 --> 00:04:09,090
+Now to set up customer validation we're going to take a quick look at the docs.
+
+66
+00:04:09,120 --> 00:04:13,590
+So you know where it exists because there are a few features that we won't be using here but that are
+
+67
+00:04:13,620 --> 00:04:15,980
+really useful to get to the docs page.
+
+68
+00:04:16,020 --> 00:04:20,300
+We're going to google mongoose in lower case there's no need to scream at the browser.
+
+69
+00:04:20,420 --> 00:04:22,750
+Custom validation.
+
+70
+00:04:23,160 --> 00:04:26,640
+The first result should be what we want mongoose validation.
+
+71
+00:04:26,640 --> 00:04:30,110
+It starts off with the basic validation that you already know how to do this.
+
+72
+00:04:30,180 --> 00:04:33,660
+But down below there is a custom validators section.
+
+73
+00:04:33,750 --> 00:04:39,990
+Here we have a phone attribute and on the attribute object along with the type we have that validate
+
+74
+00:04:40,230 --> 00:04:45,990
+validate takes two properties the validate or this is the actual function that makes sure the value
+
+75
+00:04:45,990 --> 00:04:51,940
+is valid and the message inside of the message we can even inject the actual value used.
+
+76
+00:04:51,990 --> 00:04:59,010
+So we can say that ABC is not a valid phone number or in our case one to three at gmail is not a valid
+
+77
+00:04:59,190 --> 00:05:00,110
+email.
+
+78
+00:05:00,120 --> 00:05:06,620
+Now in order to get started we're going to set up this attribute inside of our e-mail object.
+
+79
+00:05:06,740 --> 00:05:13,500
+Validate is going to be an object then we'll have the validate or set equal to a function.
+
+80
+00:05:13,680 --> 00:05:16,680
+The function gets called with the value to validate.
+
+81
+00:05:16,830 --> 00:05:20,270
+You either return true if it's valid or you return false.
+
+82
+00:05:20,340 --> 00:05:22,380
+If the value is invalid.
+
+83
+00:05:22,380 --> 00:05:25,190
+Next up we can set up our message.
+
+84
+00:05:25,580 --> 00:05:28,030
+I'm going to set message equal to a string.
+
+85
+00:05:28,250 --> 00:05:35,520
+We're going to inject the e-mail that was used and we'll say that e-mail is not a valid e-mail.
+
+86
+00:05:35,690 --> 00:05:36,830
+Excellent.
+
+87
+00:05:36,830 --> 00:05:41,810
+Now the only thing left to do to get this e-mail validation to work is actually install that third party
+
+88
+00:05:41,810 --> 00:05:45,390
+library and call the function inside of our validator.
+
+89
+00:05:45,560 --> 00:05:52,660
+The library itself is called validator it's an NPR module and you can find it by googling NPM validator.
+
+90
+00:05:52,670 --> 00:05:54,730
+It should be the first result.
+
+91
+00:05:54,900 --> 00:05:59,870
+What a handy little tip if you're ever trying to make sure that the Google search result is indeed the
+
+92
+00:05:59,870 --> 00:06:00,850
+result you want.
+
+93
+00:06:00,860 --> 00:06:02,480
+You can look at the L structure.
+
+94
+00:06:02,570 --> 00:06:07,820
+It's always package a forward slash package name which means that if you get a result like this one
+
+95
+00:06:07,940 --> 00:06:11,140
+which is forward slash validate you know it's the wrong library.
+
+96
+00:06:11,140 --> 00:06:14,600
+What you really want is the validator library.
+
+97
+00:06:14,640 --> 00:06:17,650
+Now the validator library has a ton of validations built in.
+
+98
+00:06:17,650 --> 00:06:21,490
+If you scroll down on the docs page you can see there's basically an endless list.
+
+99
+00:06:21,610 --> 00:06:27,040
+But the one they show off at the very beginning is the email method which is the one that we'll be using
+
+100
+00:06:27,160 --> 00:06:30,370
+for our purposes over inside of the terminal.
+
+101
+00:06:30,370 --> 00:06:38,340
+We can install the latest version of this module and PM install the module is called validator we'll
+
+102
+00:06:38,340 --> 00:06:42,440
+be installing the most recent version five point six point zero.
+
+103
+00:06:42,510 --> 00:06:45,960
+And I will use the same flag to update the package.
+
+104
+00:06:46,050 --> 00:06:53,340
+Jason File now that we have the module installed we can go ahead and move in to our model file and actually
+
+105
+00:06:53,370 --> 00:06:54,500
+implement it.
+
+106
+00:06:54,570 --> 00:06:57,750
+The first thing we need to do is import the library up above.
+
+107
+00:06:57,750 --> 00:07:02,210
+I'm going to change the VAR mongoose to a constant which I should have done in the first place.
+
+108
+00:07:02,340 --> 00:07:08,020
+Doesn't really matter but it is a good habit and I will also be creating a constant called the validator
+
+109
+00:07:09,750 --> 00:07:17,350
+said not equal to the return result from require and will be requiring that new library validator.
+
+110
+00:07:17,410 --> 00:07:22,540
+Now on here we have the is e-mail function it returns either true or false which means that right inside
+
+111
+00:07:22,540 --> 00:07:26,650
+of our custom function we can simply return validator.
+
+112
+00:07:26,650 --> 00:07:30,850
+Dot is email passing in de-value up above.
+
+113
+00:07:30,850 --> 00:07:35,860
+Now this function is going to return true if the email is valid it will return false if it's invalid.
+
+114
+00:07:35,980 --> 00:07:38,750
+And you might have noticed that we can actually make this even simpler.
+
+115
+00:07:38,980 --> 00:07:44,110
+Instead of getting the value in our custom function and passing it into his e-mail we can actually pass
+
+116
+00:07:44,110 --> 00:07:46,350
+in validator.
+
+117
+00:07:46,510 --> 00:07:49,750
+Dot is e-mail as is the method to use.
+
+118
+00:07:49,750 --> 00:07:53,550
+This is going to get passed the value and it will return true or false.
+
+119
+00:07:53,550 --> 00:07:55,630
+There is no reason to define a custom function.
+
+120
+00:07:55,630 --> 00:07:58,230
+This method will work on its own.
+
+121
+00:07:58,570 --> 00:08:03,370
+Now that we have our email property set up we can move down below and start setting up the password
+
+122
+00:08:03,580 --> 00:08:08,290
+attribute password which will be called Password is going to be a string.
+
+123
+00:08:08,320 --> 00:08:12,800
+So we'll go ahead and set the type equal to string.
+
+124
+00:08:12,820 --> 00:08:14,090
+We're also going to require it.
+
+125
+00:08:14,090 --> 00:08:16,700
+So all set required equal to true.
+
+126
+00:08:16,810 --> 00:08:22,960
+And last but not least we'll be setting the men length the minimum length of the plain text password.
+
+127
+00:08:22,960 --> 00:08:26,520
+In our case is going to be six although you could use a different value.
+
+128
+00:08:26,590 --> 00:08:28,190
+And this is all we need to do for password.
+
+129
+00:08:28,180 --> 00:08:30,580
+And nothing too complex here.
+
+130
+00:08:30,580 --> 00:08:34,990
+Next up we're going to specify the tokens property.
+
+131
+00:08:34,990 --> 00:08:37,730
+Now as I mentioned tokens is actually an array.
+
+132
+00:08:37,750 --> 00:08:43,510
+This is a feature available in Mongo D-B that is not available in Escuela databases like post gress
+
+133
+00:08:43,840 --> 00:08:50,380
+this nested document is going to be how we access the tokens for individual users in order to set up
+
+134
+00:08:50,380 --> 00:08:54,440
+the schema to support that we're going to set tokens equal to an array.
+
+135
+00:08:54,640 --> 00:08:56,940
+And we're going to provide one object inside of it.
+
+136
+00:08:56,950 --> 00:09:01,160
+This is the syntax that mongoose has set up for our purposes.
+
+137
+00:09:01,180 --> 00:09:05,830
+Now on this object we're going to specify all of the properties available on a token.
+
+138
+00:09:05,860 --> 00:09:12,740
+In our case it's access will set that equal to an empty object for the moment and token which will set
+
+139
+00:09:12,740 --> 00:09:14,510
+to an empty object as well.
+
+140
+00:09:14,510 --> 00:09:19,910
+Now we can go ahead and specify exactly what the access and token attributes should be.
+
+141
+00:09:19,910 --> 00:09:24,950
+In the case of access we're going to make sure that the type is a string and we'll go ahead and require
+
+142
+00:09:24,950 --> 00:09:30,290
+it by setting required equal to true required equal to true.
+
+143
+00:09:30,380 --> 00:09:35,930
+And we're going to have the exact same setup for tokin the type doesn't need to be a string and it will
+
+144
+00:09:35,930 --> 00:09:39,280
+be required so required will get set to true.
+
+145
+00:09:39,380 --> 00:09:42,900
+And this is all we need to do for the tokens array.
+
+146
+00:09:42,920 --> 00:09:47,620
+We're not going to be setting up any custom validation about the actual value for access or token that
+
+147
+00:09:47,620 --> 00:09:51,710
+will happen a little bit later it's going to be a little more complex because we do need to do a few
+
+148
+00:09:51,710 --> 00:09:53,450
+things with those values.
+
+149
+00:09:53,570 --> 00:09:55,820
+So we'll get to that in just a few videos.
+
+150
+00:09:55,820 --> 00:09:58,790
+For now though the user model is indeed complete.
+
+151
+00:09:58,790 --> 00:09:59,620
+We have our e-mail.
+
+152
+00:09:59,640 --> 00:10:01,100
+It's validated and it's unique.
+
+153
+00:10:01,100 --> 00:10:05,150
+We have our password it's validated and we have our tokens array.
+
+154
+00:10:05,150 --> 00:10:10,040
+This means it's time to actually create the request that a user is going to be able to hit to sign up
+
+155
+00:10:10,100 --> 00:10:13,220
+a new user that's going to happen over and server J.S..
+
+156
+00:10:13,220 --> 00:10:16,450
+And it's also going to be your challenge for this video.
+
+157
+00:10:16,730 --> 00:10:23,930
+This round is going to be a post HTP call post to forward slash users which is the exact same you are
+
+158
+00:10:23,930 --> 00:10:24,440
+all set up.
+
+159
+00:10:24,440 --> 00:10:26,780
+We had for creating new to do.
+
+160
+00:10:27,060 --> 00:10:32,830
+We want to create new users we post to users when we want to create new tattoos we post to to do is
+
+161
+00:10:33,530 --> 00:10:34,900
+to complete this route.
+
+162
+00:10:34,910 --> 00:10:37,830
+You can go ahead and use anything we've learned so far.
+
+163
+00:10:37,940 --> 00:10:43,810
+The most similar route we've created thus far would be the route to create a new to do the new to Duzer
+
+164
+00:10:43,870 --> 00:10:46,800
+out first creates a new instance of the model.
+
+165
+00:10:46,880 --> 00:10:52,550
+Then we go ahead and call save if things go well we return the doc if things go poorly we send back
+
+166
+00:10:52,550 --> 00:10:53,540
+the error.
+
+167
+00:10:53,540 --> 00:10:58,150
+This is exactly what you're going to need to do for the post user's request.
+
+168
+00:10:58,160 --> 00:11:03,800
+Now I'd also like you to use pick instead of pulling off the individual properties like we do up here.
+
+169
+00:11:03,890 --> 00:11:05,430
+Here we create a new object.
+
+170
+00:11:05,470 --> 00:11:11,360
+And on this object we just specify text what you're going to do instead is use pick like we do for the
+
+171
+00:11:11,360 --> 00:11:12,710
+patch method.
+
+172
+00:11:12,770 --> 00:11:16,790
+You're going to pick off the properties we want which will just be email and password.
+
+173
+00:11:16,820 --> 00:11:22,240
+This is going to give you the body variable and you can pass that into the constructor function directly.
+
+174
+00:11:22,280 --> 00:11:25,120
+Then you can call save and you can respond appropriately.
+
+175
+00:11:25,120 --> 00:11:28,210
+Whether it's successful or whether it's an error.
+
+176
+00:11:28,280 --> 00:11:31,250
+Now we have made some pretty big changes to the user model.
+
+177
+00:11:31,250 --> 00:11:36,530
+The most important change is that we have now made the email unique in order for this change to actually
+
+178
+00:11:36,530 --> 00:11:37,110
+work.
+
+179
+00:11:37,130 --> 00:11:44,630
+You're going to need to one that shut down your server to wipe the to do app database and 3 restart
+
+180
+00:11:44,630 --> 00:11:45,500
+the server.
+
+181
+00:11:45,500 --> 00:11:51,200
+If you do not wipe the database and restart the server it's not going to validate the emails to be unique
+
+182
+00:11:51,200 --> 00:11:52,750
+which is going to be a big problem.
+
+183
+00:11:52,820 --> 00:11:54,810
+Now once you're done I want you to play around with it.
+
+184
+00:11:54,860 --> 00:12:00,080
+Go ahead and make a valid request in post man then try to make the same request which should fail because
+
+185
+00:12:00,080 --> 00:12:01,550
+the e-mail will already be taken.
+
+186
+00:12:01,550 --> 00:12:05,270
+Try to play around with invalid emails and passwords as well.
+
+187
+00:12:05,270 --> 00:12:06,830
+Take a moment to pause the video.
+
+188
+00:12:06,830 --> 00:12:08,390
+Knock this out test it.
+
+189
+00:12:08,390 --> 00:12:09,270
+And when you're done.
+
+190
+00:12:09,290 --> 00:12:14,190
+Go ahead and click play.
+
+191
+00:12:14,210 --> 00:12:14,800
+How'd you do.
+
+192
+00:12:14,870 --> 00:12:18,270
+Hopefully you were able to get all of that done I left it pretty open ended.
+
+193
+00:12:18,350 --> 00:12:22,930
+But the goal here is to set you out on your own when we're doing something we've already done before
+
+194
+00:12:23,180 --> 00:12:27,140
+and the code we're going to right here is indeed something we've done in the past.
+
+195
+00:12:27,140 --> 00:12:33,200
+The first thing I'm going to do is call at post to set up the post route and we'll pass in the U R L
+
+196
+00:12:33,230 --> 00:12:35,090
+board slash users.
+
+197
+00:12:35,090 --> 00:12:40,030
+Then we can set up our callback function with our request and response arguments.
+
+198
+00:12:40,040 --> 00:12:45,740
+Next up what I want you to do is use the pick method available on low dash to pull off the email and
+
+199
+00:12:45,740 --> 00:12:47,050
+password properties.
+
+200
+00:12:47,120 --> 00:12:50,860
+We're never going to let users manually update the tokens array.
+
+201
+00:12:50,870 --> 00:12:54,140
+They're not going to be able to directly access or manipulate this.
+
+202
+00:12:54,170 --> 00:12:58,370
+We're going to be manipulating this using a set of methods which will explore a bit later.
+
+203
+00:12:58,370 --> 00:13:03,680
+For now though all we're going to do is create a variable called Body setting and equal to the return
+
+204
+00:13:03,680 --> 00:13:06,850
+result from low dash dot pick.
+
+205
+00:13:07,220 --> 00:13:13,730
+And the syntax for pick if you remember is the first argument the object we want to pick from and the
+
+206
+00:13:13,730 --> 00:13:15,890
+second argument is an array.
+
+207
+00:13:15,890 --> 00:13:17,370
+We want to pick off two properties.
+
+208
+00:13:17,390 --> 00:13:22,490
+So we're going to add two items to the array the first one will be email and the second one will be
+
+209
+00:13:22,820 --> 00:13:24,710
+password.
+
+210
+00:13:24,720 --> 00:13:30,610
+Next up we can make a new instance of our user model a variable user will get the job done.
+
+211
+00:13:30,660 --> 00:13:37,590
+We'll set that equal to new user and we're going to pass in an object with the email and password properties.
+
+212
+00:13:37,590 --> 00:13:43,290
+Now we could recreate an object setting the email property equal to body email but we already have that
+
+213
+00:13:43,400 --> 00:13:46,110
+in-body so we can actually just pass it in like this.
+
+214
+00:13:46,110 --> 00:13:51,630
+There's no reason to pass in an object that we create when we already have the object we need.
+
+215
+00:13:51,630 --> 00:13:56,490
+Now obviously this is going to at most contain the email and password because we've picked those off
+
+216
+00:13:56,760 --> 00:13:59,360
+if any of them are missing like the is not provided.
+
+217
+00:13:59,370 --> 00:14:00,750
+It won't be provided here either.
+
+218
+00:14:00,750 --> 00:14:01,980
+So the validation will fail.
+
+219
+00:14:01,980 --> 00:14:05,400
+We don't need to worry about creating the object manually.
+
+220
+00:14:05,400 --> 00:14:07,930
+Next up we can call user data.
+
+221
+00:14:07,950 --> 00:14:12,280
+Which is actually going to try to save this document to the database.
+
+222
+00:14:12,360 --> 00:14:18,150
+Now that we have the document saved we can attach a then call back by calling then and we can specify
+
+223
+00:14:18,150 --> 00:14:19,480
+our success case.
+
+224
+00:14:19,680 --> 00:14:24,850
+We're going to get that user doc and we're going to be able to respond with it.
+
+225
+00:14:24,850 --> 00:14:27,490
+We'll be setting up authentication in this route later.
+
+226
+00:14:27,490 --> 00:14:33,590
+For now though a response send call passing back the user is going to get the job done.
+
+227
+00:14:33,730 --> 00:14:38,030
+The next thing to do and the last thing to do is set up a catch call here.
+
+228
+00:14:38,040 --> 00:14:39,660
+We're going to set up catch.
+
+229
+00:14:39,970 --> 00:14:43,420
+We're going to get that error and we're going to simply send it back.
+
+230
+00:14:43,420 --> 00:14:45,360
+Response dot status.
+
+231
+00:14:45,550 --> 00:14:46,870
+A 400.
+
+232
+00:14:47,140 --> 00:14:50,840
+Then we'll use dot send to send it back.
+
+233
+00:14:50,920 --> 00:14:54,130
+We'll send it back by sending back the air ject.
+
+234
+00:14:54,310 --> 00:14:58,450
+With this in place we are now done inside of Adam and we can move on to the next step which is going
+
+235
+00:14:58,450 --> 00:15:02,950
+to be to make sure our server is shut down and wipe the database in a rowboat.
+
+236
+00:15:02,950 --> 00:15:03,830
+Mongo.
+
+237
+00:15:03,940 --> 00:15:09,120
+I'm going to go ahead and drop the to do our database by clicking it and clicking drop database.
+
+238
+00:15:09,460 --> 00:15:16,920
+Now that the database is down we can head into the terminal and start up the server node server forward
+
+239
+00:15:16,920 --> 00:15:22,620
+slash server J.S. with the server now started on port three thousand over inside of post man.
+
+240
+00:15:22,710 --> 00:15:26,050
+We can test out the call by making a few requests.
+
+241
+00:15:26,070 --> 00:15:29,200
+I'm already in need to do app local environment and so that's good.
+
+242
+00:15:29,220 --> 00:15:34,530
+I can change the method from get to post and I can set up the R L which is available in an environment
+
+243
+00:15:34,530 --> 00:15:39,810
+variable from here all we need is forward slash users which is the route we just created.
+
+244
+00:15:40,050 --> 00:15:43,590
+We are going to be sending along some body data body raw.
+
+245
+00:15:43,890 --> 00:15:46,830
+Jason is going to let us do just that.
+
+246
+00:15:46,830 --> 00:15:51,700
+I can then go ahead and set up the Jason we're going to pass in those two properties.
+
+247
+00:15:51,720 --> 00:16:00,950
+Email will Saddam equal to a valid e-mail like Andrew at example dot com and password.
+
+248
+00:16:00,980 --> 00:16:05,600
+I'm going to set password for the moment equal to a valid password as well something with greater than
+
+249
+00:16:05,600 --> 00:16:06,680
+6 characters.
+
+250
+00:16:06,800 --> 00:16:08,150
+ABC 1 2 3.
+
+251
+00:16:08,150 --> 00:16:09,550
+Exclamation mark.
+
+252
+00:16:09,650 --> 00:16:13,670
+Now that we have this in place we can go ahead and send this off and when we send it off what do we
+
+253
+00:16:13,670 --> 00:16:14,260
+get back.
+
+254
+00:16:14,270 --> 00:16:17,780
+A 200 with the user object down below.
+
+255
+00:16:17,780 --> 00:16:21,600
+Now obviously our passwords are still in play in tax but that's fine for the moment.
+
+256
+00:16:21,620 --> 00:16:25,890
+The thing we're actually testing here is that the saving happened successfully.
+
+257
+00:16:25,910 --> 00:16:31,970
+Now if we keep the data exactly the same and send off another request you should get a 400 back this
+
+258
+00:16:31,970 --> 00:16:37,400
+400 is telling you that you have a duplicate key in the to do app users collection.
+
+259
+00:16:37,580 --> 00:16:42,970
+The email is already taken which is a pretty big problem if you're trying to sign up using that e-mail.
+
+260
+00:16:42,980 --> 00:16:44,420
+This is fantastic.
+
+261
+00:16:44,420 --> 00:16:48,160
+Next up we can test some other things like sending an invalid e-mail.
+
+262
+00:16:48,260 --> 00:16:54,190
+If I do that we're going to get a 400 back with a validation error if I try to send an invalid password.
+
+263
+00:16:54,970 --> 00:16:56,600
+Like the letter A.
+
+264
+00:16:56,680 --> 00:17:03,210
+We're also going to get an invalid password message down below with this in place we are now done.
+
+265
+00:17:03,250 --> 00:17:04,870
+Obviously the route is not complete.
+
+266
+00:17:04,870 --> 00:17:09,520
+We don't have authentication or password hashing set up but we have a pretty good basic version that
+
+267
+00:17:09,520 --> 00:17:11,450
+gets us going in the right direction.
+
+268
+00:17:11,680 --> 00:17:16,860
+I'm going to go ahead and save this request inside of our to do app postman collection before I do though
+
+269
+00:17:16,870 --> 00:17:18,870
+I will send it back to some valid data.
+
+270
+00:17:19,060 --> 00:17:25,710
+And you had example dot com and for the password I'll use password with the exclamation mark over here
+
+271
+00:17:25,710 --> 00:17:29,750
+I can now see that request using the exact same format we've used so far.
+
+272
+00:17:29,790 --> 00:17:31,650
+The method followed by the URL.
+
+273
+00:17:31,770 --> 00:17:35,250
+And we'll save it to the existing to do app collection.
+
+274
+00:17:35,280 --> 00:17:37,710
+I'm not going to be committing our changes just yet.
+
+275
+00:17:37,710 --> 00:17:42,780
+We're not quite done with the route so it doesn't make sense to commit them will be handling authentication
+
+276
+00:17:42,780 --> 00:17:48,090
+and password hashing in the next several videos after we're done with it then we'll make that commit
+
+277
+00:17:48,480 --> 00:17:52,980
+that does it for this one I will see you next time where we explore how exactly we're going to be authenticating
+
+278
+00:17:52,980 --> 00:17:53,600
+users.
+
+279
+00:17:53,670 --> 00:17:54,210
+Stay tuned.
+
+280
+00:17:54,250 --> 00:17:55,320
+We'll see you then
+

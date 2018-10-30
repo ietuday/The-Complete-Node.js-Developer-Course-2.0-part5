@@ -1,0 +1,612 @@
+﻿1
+00:00:00,360 --> 00:00:06,020
+Now that we have the log in or out in place the goal for this video is to write two test cases for it.
+
+2
+00:00:06,070 --> 00:00:11,250
+We're going to write one that makes sure when a valid e-mail password combo is sent we get an x Aalto
+
+3
+00:00:11,260 --> 00:00:16,240
+can back and we're going to write a second test case that makes sure if the log in credentials don't
+
+4
+00:00:16,240 --> 00:00:19,830
+match a user in the database we return a 400.
+
+5
+00:00:19,840 --> 00:00:22,920
+Now before I do any of that I am going to remove this comment right here.
+
+6
+00:00:22,930 --> 00:00:25,990
+This is left over from the challenge in the previous video.
+
+7
+00:00:25,990 --> 00:00:30,730
+Now I can save the server file and we can move into the server test file head to the bottom and add
+
+8
+00:00:30,730 --> 00:00:31,150
+a new.
+
+9
+00:00:31,150 --> 00:00:40,950
+Describe a block for this route describe this block of tasks will be for post forward slash users a
+
+10
+00:00:40,950 --> 00:00:46,920
+forward slash log in then we can set up our aero function we'll have our two test cases the first test
+
+11
+00:00:46,920 --> 00:00:56,190
+case we're going to do together it should log in user and return auth token.
+
+12
+00:00:56,200 --> 00:01:01,750
+This is when we have a valid email and password as the request body we can set up our function with
+
+13
+00:01:01,750 --> 00:01:02,890
+our Done argument.
+
+14
+00:01:02,980 --> 00:01:06,550
+And now we can go ahead and define the second test case and this is the one that you're going to be
+
+15
+00:01:06,550 --> 00:01:08,250
+doing as a challenge.
+
+16
+00:01:08,320 --> 00:01:15,900
+It should reject invalid loggin this test case is going to make sure that if something goes wrong like
+
+17
+00:01:15,900 --> 00:01:20,650
+the password doesn't match the user's password the logon is indeed rejected.
+
+18
+00:01:20,820 --> 00:01:25,260
+We're going to knock out the first test case together and the second one that will be your challenge
+
+19
+00:01:25,290 --> 00:01:26,340
+for the video.
+
+20
+00:01:26,430 --> 00:01:31,350
+Now in order to make either of these requests we are going to need access to the seed data for this
+
+21
+00:01:31,350 --> 00:01:32,300
+first test case.
+
+22
+00:01:32,310 --> 00:01:37,110
+I'm going to go ahead and use the second user's e-mail and password and then we can go ahead and query
+
+23
+00:01:37,110 --> 00:01:38,910
+this user inside of the database.
+
+24
+00:01:38,910 --> 00:01:44,580
+After the call comes back and make sure the token was added to get started with that I am going to call
+
+25
+00:01:44,580 --> 00:01:51,550
+request passing in the application and we will be making a post request to forward slash users forward
+
+26
+00:01:51,550 --> 00:01:53,160
+slash loggin.
+
+27
+00:01:53,190 --> 00:01:58,910
+Now we can set up the body data we want to send which in our case is the email and the password.
+
+28
+00:01:59,190 --> 00:02:03,010
+We have access to the email property via the user's array.
+
+29
+00:02:03,150 --> 00:02:08,130
+We're gonna grab that second user using the index of one and we'll grab his e-mail and we can do the
+
+30
+00:02:08,130 --> 00:02:10,560
+exact same thing for the password.
+
+31
+00:02:10,650 --> 00:02:14,640
+I'm going to set password equal to we're going to go into that user's array.
+
+32
+00:02:14,640 --> 00:02:18,580
+Grab the first item and grab the password property.
+
+33
+00:02:18,600 --> 00:02:22,520
+Now a decent place at the request has been successfully set.
+
+34
+00:02:22,530 --> 00:02:24,370
+We have a valid e-mail and password.
+
+35
+00:02:24,390 --> 00:02:29,330
+We have the right HTP method and you R-AL which means now it's time to make some assertions.
+
+36
+00:02:29,340 --> 00:02:30,620
+First up the easy ones.
+
+37
+00:02:30,660 --> 00:02:36,700
+Let's expect a 200 to come back as the status which it will be if everything goes as planned.
+
+38
+00:02:36,780 --> 00:02:41,670
+And we can make an assertion that verifies an X auth token was sent back as a header.
+
+39
+00:02:41,910 --> 00:02:51,710
+I'm going to expect using a custom expect function inside of here we will expect that the response headers
+
+40
+00:02:51,710 --> 00:02:54,950
+object has an X or token will use bracket notation.
+
+41
+00:02:54,950 --> 00:03:01,910
+Once again since we have a hyphen in our property name and we're going to expect this value to exist
+
+42
+00:03:02,750 --> 00:03:07,310
+then the next thing we can do is call and and this is where we're going to set up our custom asynchronous
+
+43
+00:03:07,310 --> 00:03:10,110
+function which is going to go ahead and query the database.
+
+44
+00:03:10,220 --> 00:03:15,530
+I'm going to call end passing in the custom function which gets called with a potential error and the
+
+45
+00:03:15,530 --> 00:03:16,460
+response.
+
+46
+00:03:16,910 --> 00:03:21,680
+And like all of the cases where we used a custom function in and the first thing we're going to do is
+
+47
+00:03:21,680 --> 00:03:23,930
+check for errors if there are errors.
+
+48
+00:03:23,930 --> 00:03:25,660
+There is no reason to continue.
+
+49
+00:03:25,670 --> 00:03:29,400
+We can simply return by calling down and passing in the error.
+
+50
+00:03:29,450 --> 00:03:32,090
+So it gets properly printed to the screen.
+
+51
+00:03:32,090 --> 00:03:37,070
+Now if there are no errors with the assertions up above we are going to need to find the user that we
+
+52
+00:03:37,070 --> 00:03:44,030
+potentially created a token for using user and we can query it using find by ID since we already know
+
+53
+00:03:44,030 --> 00:03:46,470
+the idea of the user it's sitting right here.
+
+54
+00:03:46,610 --> 00:03:49,580
+Next up I can go ahead and pass in that ID.
+
+55
+00:03:49,730 --> 00:03:56,600
+I'm going to go ahead and access the first item in the user's array grab that id property just like
+
+56
+00:03:56,600 --> 00:03:57,020
+this.
+
+57
+00:03:57,110 --> 00:04:02,480
+And we can tack on a then call back to do something when the user query finishes.
+
+58
+00:04:02,480 --> 00:04:08,300
+Now if it finishes what we want to do is assert that the token that came back was indeed added into
+
+59
+00:04:08,300 --> 00:04:09,720
+the tokens array.
+
+60
+00:04:09,860 --> 00:04:20,370
+Let's expect that the user has a tokens array and that's the first item includes using to include the
+
+61
+00:04:20,370 --> 00:04:22,320
+following actual butes.
+
+62
+00:04:22,320 --> 00:04:25,170
+Now we have used to include before it doesn't mean it equals.
+
+63
+00:04:25,170 --> 00:04:30,360
+It means that the tokens object that first item has at least these properties.
+
+64
+00:04:30,360 --> 00:04:37,170
+We need an access property equal to off and we need a token property equal to the token we got sent
+
+65
+00:04:37,170 --> 00:04:37,820
+back.
+
+66
+00:04:37,920 --> 00:04:40,110
+That's in response headers object.
+
+67
+00:04:40,230 --> 00:04:44,820
+And we can use bracket notation to get the value for x off.
+
+68
+00:04:44,820 --> 00:04:50,910
+Now this is our assertion inside of the query and we are all done which means we can call done like
+
+69
+00:04:50,910 --> 00:04:52,820
+our other asynchronous tasks.
+
+70
+00:04:52,830 --> 00:04:57,360
+We also want to tack on a catch call back to catch the error that might occur right here.
+
+71
+00:04:57,360 --> 00:05:04,230
+If they're not equal on an add a catch call we're going to get the error and we're simply going to pass
+
+72
+00:05:04,230 --> 00:05:06,960
+it in to done just like this.
+
+73
+00:05:06,960 --> 00:05:09,830
+Now this is something that we've done for most of our queries.
+
+74
+00:05:09,900 --> 00:05:12,620
+When we pass a custom function in to end.
+
+75
+00:05:12,690 --> 00:05:17,220
+But if you notice up above for sign up we did not do that right here.
+
+76
+00:05:17,220 --> 00:05:21,590
+All I'm going to do is copy the line from below the highlighted code right here.
+
+77
+00:05:22,360 --> 00:05:24,740
+Move up to the test case for we forgot to add it.
+
+78
+00:05:24,760 --> 00:05:27,890
+It should create a user and paste it right here.
+
+79
+00:05:28,000 --> 00:05:30,870
+Now with the test case still fail if one of these assertions failed.
+
+80
+00:05:30,910 --> 00:05:33,170
+You betcha it's going to look for a catch case.
+
+81
+00:05:33,220 --> 00:05:38,350
+It's never going to find one which means Dunn doesn't get called and the test will time out but you're
+
+82
+00:05:38,350 --> 00:05:40,090
+not going to get a useful error message.
+
+83
+00:05:40,150 --> 00:05:45,130
+By adding this you're going to get the exact error message depending on which assertion failed and why
+
+84
+00:05:45,130 --> 00:05:46,110
+it failed.
+
+85
+00:05:46,120 --> 00:05:51,340
+Now that we have this in place our test case is complete with our custom query in place we can go ahead
+
+86
+00:05:51,370 --> 00:05:54,830
+and save our test file and run the test suite from the terminal.
+
+87
+00:05:54,850 --> 00:05:59,620
+I'm going to use NPM test to start up the test suite we're first going to move through our to do related
+
+88
+00:05:59,620 --> 00:06:00,380
+tasks.
+
+89
+00:06:00,400 --> 00:06:04,060
+Eventually we'll get to our get users test which is coming up next.
+
+90
+00:06:04,150 --> 00:06:07,620
+And our Sign-Up test all of those test cases are passing.
+
+91
+00:06:07,630 --> 00:06:08,800
+Here is our loggin test.
+
+92
+00:06:08,800 --> 00:06:11,650
+It did indeed pass which is fantastic.
+
+93
+00:06:11,650 --> 00:06:14,560
+Now the second test case failed because I haven't filled it out.
+
+94
+00:06:14,560 --> 00:06:16,480
+That's perfectly fine as long as you're.
+
+95
+00:06:16,480 --> 00:06:19,820
+Should logon user and return auth token test as passing.
+
+96
+00:06:19,840 --> 00:06:21,980
+You are ready to move on.
+
+97
+00:06:22,270 --> 00:06:27,430
+Now if one of these values did not match to include would throw a proper error and to prove that I can
+
+98
+00:06:27,430 --> 00:06:29,940
+simply change auth to off t.
+
+99
+00:06:30,130 --> 00:06:35,410
+This proves that that is essential to make sure to add this catch call if you don't call it you're not
+
+100
+00:06:35,410 --> 00:06:39,270
+going to get a clear error message which is just going to make your life a lot harder.
+
+101
+00:06:39,270 --> 00:06:44,500
+You're gonna have to dig around and figure out exactly why things are not working as expected this time
+
+102
+00:06:44,500 --> 00:06:45,000
+around.
+
+103
+00:06:45,010 --> 00:06:50,110
+We do get an error and it's really clear we expected some object to include these values.
+
+104
+00:06:50,110 --> 00:06:55,680
+These values obviously were in that object and we can go right to the source to figure out why.
+
+105
+00:06:55,810 --> 00:06:59,620
+Now that we're done with the first test case let's go ahead and move on to the second one and this is
+
+106
+00:06:59,620 --> 00:07:01,030
+going to be your challenge.
+
+107
+00:07:01,030 --> 00:07:04,620
+This test case is going to be really similar to the one we just created.
+
+108
+00:07:04,630 --> 00:07:09,010
+The only thing you're going to change is instead of passing in a valid password you're going to pass
+
+109
+00:07:09,010 --> 00:07:12,290
+in an invalid password and then you're going to tweak all of your assertions.
+
+110
+00:07:12,430 --> 00:07:14,310
+The 200 should be a 400.
+
+111
+00:07:14,470 --> 00:07:17,490
+You should expect the X auth token to not exist.
+
+112
+00:07:17,590 --> 00:07:24,160
+And down below you should expect that the user tokens array has a length equal to zero because no token
+
+113
+00:07:24,370 --> 00:07:27,190
+should have been created and it didn't have any to start with.
+
+114
+00:07:27,190 --> 00:07:29,360
+So the length should still be 0.
+
+115
+00:07:29,380 --> 00:07:30,950
+Take a moment to knock this out.
+
+116
+00:07:30,970 --> 00:07:34,600
+You can actually copy the contents of the test case up above.
+
+117
+00:07:34,600 --> 00:07:40,350
+Paste it into the test case down below tweak it then rerun the test suite make sure everything passes
+
+118
+00:07:40,360 --> 00:07:42,140
+and if it does you're good to go.
+
+119
+00:07:42,160 --> 00:07:42,910
+Pause the video.
+
+120
+00:07:42,910 --> 00:07:43,790
+Knock this out.
+
+121
+00:07:43,840 --> 00:07:44,380
+Test it.
+
+122
+00:07:44,380 --> 00:07:47,920
+And when you're done click play.
+
+123
+00:07:47,920 --> 00:07:48,480
+All right.
+
+124
+00:07:48,520 --> 00:07:53,290
+I'm going to get started by copying the code from up above and pasting it down below.
+
+125
+00:07:53,290 --> 00:07:56,780
+Then we can tweak it to fit what this test is supposed to test.
+
+126
+00:07:56,830 --> 00:08:01,760
+I'm going to change the password to anything other than what it is by concatenating some value.
+
+127
+00:08:01,840 --> 00:08:03,730
+The number one will do the trick.
+
+128
+00:08:03,730 --> 00:08:06,210
+And then we can go ahead and tweak the assertions.
+
+129
+00:08:06,220 --> 00:08:08,880
+The 200 should turn into a 400.
+
+130
+00:08:08,920 --> 00:08:10,810
+We should not get an x or token.
+
+131
+00:08:10,870 --> 00:08:13,090
+So I'm going to use to not exist.
+
+132
+00:08:13,150 --> 00:08:18,850
+And down below instead of expecting the first item to include certain properties we're going to expect
+
+133
+00:08:18,850 --> 00:08:25,540
+that the array itself has a length equal to zero which means we can remove the entire to include call
+
+134
+00:08:25,720 --> 00:08:30,640
+and replace it with one to be 0 just like this.
+
+135
+00:08:30,670 --> 00:08:31,840
+And that's all it takes.
+
+136
+00:08:32,020 --> 00:08:34,450
+Tweaking this test case really isn't too bad.
+
+137
+00:08:34,450 --> 00:08:39,340
+And if we now rerun the test suite we should see all of the test cases passing.
+
+138
+00:08:39,430 --> 00:08:43,570
+This will be the final time we rerun it for this video so you'll only have to watch these test cases
+
+139
+00:08:43,810 --> 00:08:46,020
+go through just this once.
+
+140
+00:08:46,030 --> 00:08:48,810
+Here we go we are nearing the end Rathi sign up call.
+
+141
+00:08:48,850 --> 00:08:53,380
+Now we're at the loggin call all of our test cases are passing which is fantastic.
+
+142
+00:08:53,380 --> 00:08:57,070
+All of the tweaks to our test case do appear to be working which means we are done.
+
+143
+00:08:57,160 --> 00:08:59,860
+We can make a comment and wrap this one up.
+
+144
+00:08:59,860 --> 00:09:03,370
+I'm going to run and get status and we should have those two changed files.
+
+145
+00:09:03,400 --> 00:09:08,530
+We made a small tweak to server and we added a few tests to the server test file get commit with the
+
+146
+00:09:08,610 --> 00:09:17,650
+AM flag we'll add those to the next commit ad tests for post users logon.
+
+147
+00:09:17,750 --> 00:09:18,860
+I'm going to make the commit.
+
+148
+00:09:18,860 --> 00:09:21,500
+Push it up to get how and that is it for this one.
+
+149
+00:09:21,590 --> 00:09:26,040
+I will see you in the next video where you are going to explore how to log out users.
+
+150
+00:09:26,090 --> 00:09:29,290
+This means we'll be deleting all tokens as opposed to creating them.
+
+151
+00:09:29,360 --> 00:09:30,100
+It's coming up next.
+
+152
+00:09:30,110 --> 00:09:31,010
+So stay tuned.
+
+153
+00:09:31,040 --> 00:09:32,020
+We'll see you then
+

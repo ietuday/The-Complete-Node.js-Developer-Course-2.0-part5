@@ -1,0 +1,1192 @@
+﻿1
+00:00:00,180 --> 00:00:05,160
+In this video you're going to learn about hashing in Jason Webb tokens using these techniques will be
+
+2
+00:00:05,160 --> 00:00:08,330
+able to set up authentication for our application.
+
+3
+00:00:08,440 --> 00:00:13,710
+Currently all of the routes down below getting to Doo's creating to do is getting an individual to do
+
+4
+00:00:13,830 --> 00:00:15,600
+leading to do's and updating to do's.
+
+5
+00:00:15,600 --> 00:00:17,220
+These are all public routes.
+
+6
+00:00:17,220 --> 00:00:21,410
+Anybody can hit these and manipulate data that wasn't necessarily created by them.
+
+7
+00:00:21,570 --> 00:00:25,830
+Once authentication is in place all these are going to be private routes meaning that you have to be
+
+8
+00:00:25,830 --> 00:00:31,230
+logged in and you can only manipulate data that you actually own which means I can't update to do that.
+
+9
+00:00:31,230 --> 00:00:32,590
+I didn't create.
+
+10
+00:00:32,740 --> 00:00:37,020
+Now in order to settle this up we're going to have to come up with some way to authenticate these requests
+
+11
+00:00:37,250 --> 00:00:39,390
+but we're going to do is create a token system.
+
+12
+00:00:39,480 --> 00:00:45,450
+This token you can think of it like a string is going to get sent back from our sign up and log in requests.
+
+13
+00:00:45,450 --> 00:00:48,620
+We don't have the log in one place just yet but we'll get to it soon.
+
+14
+00:00:48,740 --> 00:00:53,250
+The client is then going to take this token and use it to authenticate other requests.
+
+15
+00:00:53,250 --> 00:00:58,530
+They will simply pass it along as a hatter for example to a patch request and it will be able to make
+
+16
+00:00:58,530 --> 00:01:02,040
+that call successfully after authenticating.
+
+17
+00:01:02,040 --> 00:01:07,080
+Now in this video we're going to talk about hashing and authentication how to actually create that token
+
+18
+00:01:07,440 --> 00:01:10,080
+to get started over inside of the playground folder.
+
+19
+00:01:10,080 --> 00:01:11,430
+Let's make a file.
+
+20
+00:01:11,430 --> 00:01:17,190
+I'm going to call the file hashing dot J.S. and inside of hashing out yes we're going to get started
+
+21
+00:01:17,280 --> 00:01:23,140
+by playing around with a very basic hash function it's called shot 2:56.
+
+22
+00:01:23,160 --> 00:01:28,110
+Now in order to play around with this hash function we're going to need to install a module crypto J.S.
+
+23
+00:01:28,320 --> 00:01:32,910
+that includes all sorts of encryption and hashing algorithms some you might have heard of for example
+
+24
+00:01:33,000 --> 00:01:40,680
+abs M.D five or the one we're going to be using Shaw 256 to install it will run NPM I which is short
+
+25
+00:01:40,680 --> 00:01:46,010
+for install the module name is crypto hyphen SJS.
+
+26
+00:01:46,250 --> 00:01:49,920
+And we will be specifying the most recent version at three point one.
+
+27
+00:01:49,920 --> 00:01:52,740
+Point six with the Save flag.
+
+28
+00:01:52,940 --> 00:01:55,900
+This is going to go ahead and install the crypto Agellius module.
+
+29
+00:01:55,970 --> 00:02:00,960
+Once it's installed we can move in to our hashing file and import it.
+
+30
+00:02:01,100 --> 00:02:06,400
+I'm going to grab a certain property off of the require return result.
+
+31
+00:02:06,500 --> 00:02:15,340
+It's sha to 56 and the 256 comes from the number of bits that are the resulting hash.
+
+32
+00:02:15,340 --> 00:02:18,500
+Next up we'll set it equal to the return result from require.
+
+33
+00:02:18,610 --> 00:02:27,140
+And we're going to require that crypto J.S. module and now we have access to our hashing function to
+
+34
+00:02:27,140 --> 00:02:32,100
+hash a value all we have to do is pass it into the SHA 256 function.
+
+35
+00:02:32,150 --> 00:02:36,160
+I'm going to make a variable called message and all set equal to some string.
+
+36
+00:02:36,170 --> 00:02:41,090
+Something like I am user number three.
+
+37
+00:02:41,230 --> 00:02:43,780
+Then we can go ahead and actually hash it.
+
+38
+00:02:43,870 --> 00:02:46,770
+I'm going to make a variable called hash to store the result.
+
+39
+00:02:46,930 --> 00:02:52,400
+I'm going to call sha 2:56 passing in the value message.
+
+40
+00:02:52,810 --> 00:02:57,760
+Now the result is actually an object we're going to convert that to a string and using two string and
+
+41
+00:02:57,760 --> 00:03:04,840
+then we can go ahead and print both values to the screen using Konsole dot LOC console dialog.
+
+42
+00:03:05,020 --> 00:03:07,570
+I'll use template strings for both.
+
+43
+00:03:07,570 --> 00:03:10,730
+I'll print message Kolin followed by the actual message.
+
+44
+00:03:10,840 --> 00:03:15,100
+The message variable and I'll do the exact same thing for the hash.
+
+45
+00:03:15,190 --> 00:03:21,650
+I'm going to call console dialog with a template string in the hash colon space equals.
+
+46
+00:03:21,850 --> 00:03:28,120
+Then I'll inject the hash variable with this in place we can now run the hashing J S file and see what
+
+47
+00:03:28,120 --> 00:03:30,280
+we get over inside of the terminal.
+
+48
+00:03:30,280 --> 00:03:32,830
+I'm going to use clear to clear the terminal output.
+
+49
+00:03:32,830 --> 00:03:37,030
+We are going to run node and will going to be running a file in the playground folder.
+
+50
+00:03:37,060 --> 00:03:41,270
+The file itself is called hashing dot J Yes when we run it.
+
+51
+00:03:41,320 --> 00:03:42,460
+First up we got our message.
+
+52
+00:03:42,460 --> 00:03:44,170
+I am a user number three.
+
+53
+00:03:44,200 --> 00:03:48,820
+Then we get this really long string that looks random but I promise you it's not.
+
+54
+00:03:48,840 --> 00:03:52,670
+This is the hashed result of the message above.
+
+55
+00:03:52,690 --> 00:03:56,530
+Now hashing is fantastic hashing is a one way algorithm.
+
+56
+00:03:56,530 --> 00:04:02,470
+Meaning that given this message I am always going to get this result but I cannot get the original message
+
+57
+00:04:02,470 --> 00:04:03,010
+back.
+
+58
+00:04:03,130 --> 00:04:07,720
+If I have the result now I can prove that I'm always going to get the same result by simply rerunning
+
+59
+00:04:07,720 --> 00:04:09,140
+the file a few times.
+
+60
+00:04:09,160 --> 00:04:11,630
+I'm going to rerun it 4 times and what do I get.
+
+61
+00:04:11,650 --> 00:04:17,890
+I get the exact same hash value back because I passed in and the exact same hash value.
+
+62
+00:04:17,890 --> 00:04:20,530
+Now hashing is used in a ton of different situations.
+
+63
+00:04:20,530 --> 00:04:23,330
+For example storing passwords in a database.
+
+64
+00:04:23,410 --> 00:04:26,770
+It's a bad idea to store plain text passwords in a database.
+
+65
+00:04:26,770 --> 00:04:30,470
+So what a lot of people do is they salt and hash their passwords.
+
+66
+00:04:30,520 --> 00:04:35,680
+We'll talk about salting a little later but you already know what hashing is hashing is a way to obfuscate
+
+67
+00:04:35,740 --> 00:04:37,650
+the actual plain text password.
+
+68
+00:04:37,840 --> 00:04:41,350
+When someone goes to log in later they pass us the plaintext password.
+
+69
+00:04:41,470 --> 00:04:46,190
+We hash it getting their results and we compare that result to the result in the database.
+
+70
+00:04:46,300 --> 00:04:48,970
+If the two hashes are identical then the password is correct.
+
+71
+00:04:49,000 --> 00:04:54,820
+If they're not identical then the password must not have matched the one stored in the database.
+
+72
+00:04:54,820 --> 00:04:59,590
+Now we're going to be using hashing in a similar way to Web sites like source for each source forge
+
+73
+00:04:59,740 --> 00:05:05,350
+lets you verify that the file you downloaded is the one that you actually wanted because it hashes the
+
+74
+00:05:05,350 --> 00:05:07,750
+file and it shows you that hash value.
+
+75
+00:05:07,750 --> 00:05:11,440
+This means you can hash the file later if you get the same result.
+
+76
+00:05:11,440 --> 00:05:13,990
+You know it's the file Source Forge wanted you to get.
+
+77
+00:05:13,990 --> 00:05:18,640
+If you get a different result you know it's not the file that Source Forge wanted you to get and you
+
+78
+00:05:18,640 --> 00:05:21,630
+probably shouldn't use it because it could have viruses inside.
+
+79
+00:05:21,640 --> 00:05:25,080
+This is the exact technique that we'll be using for our token.
+
+80
+00:05:25,090 --> 00:05:29,790
+Now this is not going to prevent someone in the middle from seeing the value we're going to use HTP
+
+81
+00:05:29,800 --> 00:05:33,400
+ass for that will be securely transferring our tokens.
+
+82
+00:05:33,400 --> 00:05:38,830
+This is however going to prevent someone on the client who gets the value from manipulating the ID and
+
+83
+00:05:38,830 --> 00:05:40,540
+changing it to something else.
+
+84
+00:05:40,540 --> 00:05:45,340
+Let's say I send back a token and that token says this is for user number 3.
+
+85
+00:05:45,340 --> 00:05:49,420
+The user then gets the token and they change it to the number 4 and they try to delete someone else's
+
+86
+00:05:49,420 --> 00:05:49,930
+data.
+
+87
+00:05:50,040 --> 00:05:56,170
+What we can do is use hashing to make sure that that value the ID doesn't actually get changed if it
+
+88
+00:05:56,170 --> 00:06:02,020
+does we'll be able to spot that change and we'll be able to deny the user access because we know that
+
+89
+00:06:02,020 --> 00:06:04,670
+they never actually got that token from us.
+
+90
+00:06:04,690 --> 00:06:07,150
+They probably created the token on their own.
+
+91
+00:06:07,480 --> 00:06:11,080
+Now to illustrate how this is going to work let's talk about the data that we want to send back from
+
+92
+00:06:11,080 --> 00:06:12,960
+the server to the client.
+
+93
+00:06:13,060 --> 00:06:18,370
+We're going to make an object and we're going to call that object data and we'll set it equal to a regular
+
+94
+00:06:18,370 --> 00:06:22,520
+object for now specifying just one property ID.
+
+95
+00:06:22,780 --> 00:06:28,210
+The id property is going to equal the user's ID inside of the user's collection.
+
+96
+00:06:28,210 --> 00:06:32,370
+This is going to let us know which user should be able to make that request.
+
+97
+00:06:32,380 --> 00:06:39,040
+For example if I'm trying to delete a to do with an ID of 3 but the user who created that doesn't match
+
+98
+00:06:39,040 --> 00:06:43,060
+the idea of the token that I know that they shouldn't be able to delete that because it's not their
+
+99
+00:06:43,060 --> 00:06:43,920
+data.
+
+100
+00:06:44,140 --> 00:06:48,100
+Right here I'm going to set id equal to the number for excellent.
+
+101
+00:06:48,130 --> 00:06:51,330
+This is the data we want to send back to the client.
+
+102
+00:06:51,340 --> 00:06:56,530
+Now the important piece of the puzzle is going to be making sure that the client doesn't set 4 to 5.
+
+103
+00:06:56,680 --> 00:07:01,450
+Send the token back to us and say hey go ahead and delete all the to do's for user number 5.
+
+104
+00:07:01,450 --> 00:07:03,360
+That would be a really big security flaw.
+
+105
+00:07:03,550 --> 00:07:07,180
+So instead we're going to do as we are going to create a separate variable.
+
+106
+00:07:07,180 --> 00:07:11,250
+A variable called a token and this is what we're going to send back to the user.
+
+107
+00:07:11,500 --> 00:07:17,790
+The token variable is going to contain a data property that set equal to the data object defined above.
+
+108
+00:07:17,920 --> 00:07:20,470
+We can use yes 6 to make that definition.
+
+109
+00:07:20,590 --> 00:07:23,940
+Then we're going to go ahead and set a hash property.
+
+110
+00:07:24,190 --> 00:07:28,160
+The hash property is going to be the hash value of the data.
+
+111
+00:07:28,330 --> 00:07:32,560
+If the data changes later on and we rehash it we're not going to get the same value back so we'll be
+
+112
+00:07:32,560 --> 00:07:38,610
+able to tell that the data was manipulated by the client and we should not expect it to be valid.
+
+113
+00:07:38,770 --> 00:07:45,240
+Right here I'm going to set cash equal to the return result from Shaw to 56.
+
+114
+00:07:45,290 --> 00:07:51,810
+We're going to pass in the string now in this case we have an object so we can use Jason docstring ify
+
+115
+00:07:51,860 --> 00:07:56,880
+to convert our object to a string of Pasadena right here.
+
+116
+00:07:57,140 --> 00:08:00,460
+Then we can go ahead and call the two string method.
+
+117
+00:08:00,560 --> 00:08:06,610
+Storing the resulting hash on the hash property with this in place we now have a token.
+
+118
+00:08:06,640 --> 00:08:08,570
+Now this token is not foolproof.
+
+119
+00:08:08,570 --> 00:08:13,510
+For example let's say the user changes the data id property to 5.
+
+120
+00:08:13,610 --> 00:08:19,340
+All they have to do is rehash that data added onto the hash properties and the token back and they technically
+
+121
+00:08:19,340 --> 00:08:20,260
+would trick us.
+
+122
+00:08:20,400 --> 00:08:26,210
+What we're going to do to prevent this trickery is salt the hash salting a hash means you add something
+
+123
+00:08:26,210 --> 00:08:29,510
+on to the hash that is unique that changes the value.
+
+124
+00:08:29,510 --> 00:08:34,880
+For example if I hash the string password I'm going to get the same result every time.
+
+125
+00:08:35,000 --> 00:08:40,370
+But if I hash the string password with some sort of randomly generated value like this I'm going to
+
+126
+00:08:40,370 --> 00:08:41,630
+get a different result.
+
+127
+00:08:41,690 --> 00:08:46,890
+And as long as I use a different salt every single time I'm never going to get the same hash twice.
+
+128
+00:08:46,910 --> 00:08:52,140
+And this is exactly what we want we want to have a secret out add on to the end like a string.
+
+129
+00:08:52,340 --> 00:08:54,510
+Some secret will do for now.
+
+130
+00:08:55,440 --> 00:08:57,600
+And this is going to salt our hash.
+
+131
+00:08:57,600 --> 00:09:01,460
+Now the user the client they're not going to be able to manipulate this data anymore.
+
+132
+00:09:01,500 --> 00:09:04,230
+They could change the ID from four to five.
+
+133
+00:09:04,260 --> 00:09:08,270
+They could try to rehash but they're not going to have the secret so their hash is going to be bad.
+
+134
+00:09:08,430 --> 00:09:13,230
+When we then try to verify the hash later on we're going to see that the data and the hash don't quite
+
+135
+00:09:13,230 --> 00:09:18,360
+add up because the person who manipulated it didn't have the secret and will be able to deny access
+
+136
+00:09:18,420 --> 00:09:20,190
+for that request.
+
+137
+00:09:20,640 --> 00:09:25,290
+Let's take a look at how we would validate that this tokin was not manipulated down below.
+
+138
+00:09:25,410 --> 00:09:32,050
+I'm going to create a variable called result hash this will store the hash of the data that comes back
+
+139
+00:09:32,260 --> 00:09:34,970
+the data that may or may not have been manipulated.
+
+140
+00:09:34,990 --> 00:09:40,910
+I'm going to set it equal to SHA 2:56 passing in the actual data.
+
+141
+00:09:41,050 --> 00:09:47,210
+This is accessible via Jason docstring if I tokin dot data.
+
+142
+00:09:47,320 --> 00:09:49,000
+We're going to access the data property.
+
+143
+00:09:49,060 --> 00:09:50,010
+We're going to hash it.
+
+144
+00:09:50,140 --> 00:09:55,270
+And we're also going to use the exact same salt some secret.
+
+145
+00:09:55,270 --> 00:10:00,220
+Now we're going to go ahead and call to strenge on the results so we can get back our string value and
+
+146
+00:10:00,220 --> 00:10:09,940
+we can make some comparisons if the result hash equals using triple equals the token hash property then
+
+147
+00:10:09,940 --> 00:10:15,850
+we know that data was not manipulated because if it was the hash would not equal the hash provided because
+
+148
+00:10:15,850 --> 00:10:16,900
+of the salt.
+
+149
+00:10:16,900 --> 00:10:25,890
+This means that we can use console log to print data was not changed if the hashes do not equal each
+
+150
+00:10:25,890 --> 00:10:31,560
+other then we know the data was changed and we should not trust it because it's most likely not correct
+
+151
+00:10:31,800 --> 00:10:34,050
+data was changed.
+
+152
+00:10:34,170 --> 00:10:35,820
+Don't trust
+
+153
+00:10:41,580 --> 00:10:46,960
+us now that we have our two messages in place we can go ahead and rerun this file from the terminal.
+
+154
+00:10:47,040 --> 00:10:47,730
+And what do we get.
+
+155
+00:10:47,730 --> 00:10:52,890
+We get data out was not changed and it wasn't right between here where we could have changed the data.
+
+156
+00:10:52,890 --> 00:10:53,940
+We never did.
+
+157
+00:10:53,940 --> 00:10:59,100
+Now we can go ahead and actually change the data to make sure that the call fails down below after that
+
+158
+00:10:59,100 --> 00:10:59,760
+change.
+
+159
+00:10:59,790 --> 00:11:04,230
+We should get data was changed do not trust the men in the middle.
+
+160
+00:11:04,230 --> 00:11:05,850
+They might try to do something like this.
+
+161
+00:11:05,940 --> 00:11:13,430
+I might try to change the token data ID property to five let's say on user form really mad at user 5
+
+162
+00:11:13,440 --> 00:11:14,850
+I want to wipe all their data.
+
+163
+00:11:14,910 --> 00:11:21,630
+I would change the ID and then I would also create the hash token hash is now going to equal the hash
+
+164
+00:11:21,630 --> 00:11:26,220
+of the new data shock 256 will pass in.
+
+165
+00:11:26,220 --> 00:11:30,930
+Jason docstring ify to convert our object into a string.
+
+166
+00:11:30,930 --> 00:11:34,500
+We have that object it's in tokin dot data.
+
+167
+00:11:34,500 --> 00:11:37,590
+Then we're going to go ahead and call two strings.
+
+168
+00:11:39,480 --> 00:11:42,950
+Now this is where the salt comes into play the person in the middle.
+
+169
+00:11:42,990 --> 00:11:45,180
+The person on the client trying to manipulate that data.
+
+170
+00:11:45,180 --> 00:11:48,420
+They do not have access to the same salt.
+
+171
+00:11:48,420 --> 00:11:52,920
+They don't know that secret because the secret is only on the server which means when they try to rehash
+
+172
+00:11:53,100 --> 00:11:58,620
+and update tokened out hash to a new value it's not going to match the hash that we create later on.
+
+173
+00:11:58,620 --> 00:12:00,830
+And we'll be able to tell that the data was changed.
+
+174
+00:12:00,900 --> 00:12:06,230
+If I rerun the file this time around we can see data was changed do not trust.
+
+175
+00:12:06,300 --> 00:12:10,870
+If I comment out these lines and rerun run it what do we get.
+
+176
+00:12:11,040 --> 00:12:13,070
+Well I never say the files get the same result.
+
+177
+00:12:13,140 --> 00:12:18,990
+But if I save the file and rerun it this time we see data was not changed and that is fantastic.
+
+178
+00:12:19,020 --> 00:12:23,530
+We don't have a way to make sure that the data right here was never changed.
+
+179
+00:12:23,610 --> 00:12:27,350
+In our case this is going to be the token we pass back and forth.
+
+180
+00:12:27,600 --> 00:12:33,870
+Now this concept that we just went over the idea of creating an object hashing it and verifying it later.
+
+181
+00:12:33,990 --> 00:12:35,540
+This is not something new.
+
+182
+00:12:35,550 --> 00:12:40,590
+There's actually a whole standard it's called the Jasen web tokin and this is exactly what we're going
+
+183
+00:12:40,590 --> 00:12:43,200
+to be implementing inside of our application.
+
+184
+00:12:43,290 --> 00:12:47,870
+We could write all this code out and handle all the edge cases but there's no reason to do that.
+
+185
+00:12:47,880 --> 00:12:53,710
+There's a standard in place with libraries that make adding JWT short for Jason Webb tokens or port
+
+186
+00:12:53,910 --> 00:12:55,650
+really really easy.
+
+187
+00:12:55,650 --> 00:13:00,120
+I'm going to comment out all of the code we have so far both examples and we're going to go ahead and
+
+188
+00:13:00,120 --> 00:13:02,000
+install this new library.
+
+189
+00:13:02,010 --> 00:13:06,390
+We're not going to be using the crypto JSA library inside of our actual application.
+
+190
+00:13:06,390 --> 00:13:08,560
+This was for playground purposes only.
+
+191
+00:13:08,670 --> 00:13:14,520
+The next library and Jason Webb token we are going to be using inside of our actual application code
+
+192
+00:13:15,090 --> 00:13:18,510
+over in the terminal we can use clear to clear the terminal output.
+
+193
+00:13:18,600 --> 00:13:20,110
+I'm going to run NPM I.
+
+194
+00:13:20,130 --> 00:13:28,230
+The module name is Jason Wehbe token and we're looking for the version at seven point 1.9 which is the
+
+195
+00:13:28,230 --> 00:13:31,230
+latest version and I'll be using the Save flag.
+
+196
+00:13:31,530 --> 00:13:35,760
+Now we can go ahead and actually run the installer installing the module and we can play around with
+
+197
+00:13:35,760 --> 00:13:38,310
+it over inside of hashing out.
+
+198
+00:13:38,370 --> 00:13:44,520
+Yes essentially what we get is two functions one to create the token and one to verify it.
+
+199
+00:13:44,670 --> 00:13:49,610
+Instead of adding all this code with the if else statements we just simply call these two utility functions.
+
+200
+00:13:49,620 --> 00:13:50,970
+It's really painless.
+
+201
+00:13:51,000 --> 00:13:54,570
+It's truly a fantastic library right here.
+
+202
+00:13:54,570 --> 00:14:00,510
+I'm going to make a concert at the top of the file calling it JWT and sending an equal to the return
+
+203
+00:14:00,510 --> 00:14:04,740
+result from requiring Jason Webb tokin.
+
+204
+00:14:04,800 --> 00:14:13,900
+Now there are two methods we're going to use are JWT ADOT sign and just below that JWT dot varify JWT
+
+205
+00:14:14,160 --> 00:14:20,400
+sign as you might expect takes the object in this case the data with the user ID and it signs it.
+
+206
+00:14:20,400 --> 00:14:24,400
+It creates that hash and then it returns the token value.
+
+207
+00:14:24,420 --> 00:14:27,120
+Now JWT varified does the opposite.
+
+208
+00:14:27,120 --> 00:14:29,040
+It takes that token and the secret.
+
+209
+00:14:29,100 --> 00:14:32,190
+And it makes sure that data was not manipulated.
+
+210
+00:14:32,190 --> 00:14:34,000
+Let's go ahead and call it right now.
+
+211
+00:14:34,080 --> 00:14:39,790
+I'm going to recreate our data variable of our data set it equal to the object with the ID and also
+
+212
+00:14:39,830 --> 00:14:41,700
+the ID to the number 10.
+
+213
+00:14:41,700 --> 00:14:43,700
+For the moment perfect.
+
+214
+00:14:43,800 --> 00:14:50,700
+Now we can go ahead and call sign the sign method takes the object in our case we have that as the data
+
+215
+00:14:50,820 --> 00:14:57,190
+variable and it takes your secret I'm going to make our secret one two three A B C.
+
+216
+00:14:57,240 --> 00:15:00,430
+Now the call to sign it is going to return our token.
+
+217
+00:15:00,570 --> 00:15:03,390
+We're going to want to store that in a variable called token.
+
+218
+00:15:03,420 --> 00:15:08,370
+I'm going to comment out the other line and this this is the value we're going to send back to the user
+
+219
+00:15:08,580 --> 00:15:10,710
+when they either sign up or log in.
+
+220
+00:15:10,740 --> 00:15:16,680
+It's also the value we're going to store inside of that tokens array access will equal the string off
+
+221
+00:15:16,890 --> 00:15:18,960
+and the token will equal the token.
+
+222
+00:15:18,990 --> 00:15:23,550
+We just generated now that we signed our data we can go ahead and print it to the screen and take a
+
+223
+00:15:23,550 --> 00:15:28,650
+look at what we get council Lague token.
+
+224
+00:15:28,860 --> 00:15:34,380
+I'm going to head into the terminal and use clear and then I'll rerun the file through node and send
+
+225
+00:15:34,380 --> 00:15:36,830
+the playground folder and it's called hashing.
+
+226
+00:15:37,000 --> 00:15:38,430
+Yes what do we get.
+
+227
+00:15:38,520 --> 00:15:43,380
+We get another long the cryptographic looking strain and that's exactly what it is.
+
+228
+00:15:43,440 --> 00:15:49,500
+This string stores all of the information we need to verify that the data the data right here was never
+
+229
+00:15:49,560 --> 00:15:50,620
+manipulated.
+
+230
+00:15:50,970 --> 00:15:56,320
+Now if you want to take a look at exactly what makes up a JWT you can take the value.
+
+231
+00:15:56,430 --> 00:15:58,080
+I'm going to copy it from the terminal.
+
+232
+00:15:58,080 --> 00:16:00,330
+You can go to your browser and head over to J.
+
+233
+00:16:00,350 --> 00:16:01,640
+W.T..
+
+234
+00:16:01,770 --> 00:16:09,270
+I know JWT Io has a bunch of documentation and explanations about how Jason Webb tokens work but on
+
+235
+00:16:09,270 --> 00:16:13,460
+the home page they also have a really cool tool over on the left.
+
+236
+00:16:13,560 --> 00:16:14,950
+We can paste in our token.
+
+237
+00:16:15,150 --> 00:16:17,960
+I'm going to delete the existing value and paste the value in.
+
+238
+00:16:18,060 --> 00:16:20,940
+On the right we can see information about that token.
+
+239
+00:16:21,150 --> 00:16:23,370
+There's three main parts to a JWT.
+
+240
+00:16:23,380 --> 00:16:25,560
+We're only going to be editing the payload.
+
+241
+00:16:25,560 --> 00:16:29,940
+We have the header which stores things like the algorithm that was used in this case.
+
+242
+00:16:30,030 --> 00:16:32,490
+As 2:56 is used and we add the type.
+
+243
+00:16:32,490 --> 00:16:33,890
+It's a Jason Webb tokin.
+
+244
+00:16:34,080 --> 00:16:36,020
+And the payload we have the thing we set.
+
+245
+00:16:36,030 --> 00:16:42,330
+We set the ID to 10 and we have the issued at time stamp which tells us when the token was created this
+
+246
+00:16:42,330 --> 00:16:45,000
+is really useful data down below.
+
+247
+00:16:45,150 --> 00:16:46,500
+We have the verification.
+
+248
+00:16:46,500 --> 00:16:48,720
+This is where the actual algorithm is executed.
+
+249
+00:16:48,720 --> 00:16:50,680
+This is where the hash is stored.
+
+250
+00:16:50,700 --> 00:16:53,770
+Now you'll notice right now I have an invalid signature down below.
+
+251
+00:16:53,880 --> 00:16:56,820
+That's because the Secret right here is different from the secret.
+
+252
+00:16:56,850 --> 00:17:01,200
+I used to create the hash over inside of atom.
+
+253
+00:17:01,230 --> 00:17:02,540
+I used one two three.
+
+254
+00:17:02,550 --> 00:17:09,440
+ABC if I change this text box to 1 to 3 ABC now I had the signature as verified.
+
+255
+00:17:09,690 --> 00:17:10,940
+This is what makes up a token.
+
+256
+00:17:11,130 --> 00:17:13,150
+Everything before the first dot is the Hatter.
+
+257
+00:17:13,200 --> 00:17:16,070
+And between that second and third dots that's the payload.
+
+258
+00:17:16,080 --> 00:17:17,490
+That's our information.
+
+259
+00:17:17,490 --> 00:17:23,670
+And the last part is the hash which allows us to verify that the payload was never changed.
+
+260
+00:17:23,670 --> 00:17:28,250
+Now that we have our token we can go ahead and learn how to verify that it was not altered.
+
+261
+00:17:28,410 --> 00:17:32,660
+JWT verify is the function that's going to let us get that done.
+
+262
+00:17:32,670 --> 00:17:35,800
+We're going to call it passing in the token we want to verify.
+
+263
+00:17:35,970 --> 00:17:38,500
+And we're going to be passing in the exact same secret.
+
+264
+00:17:38,610 --> 00:17:39,540
+It has to be the same.
+
+265
+00:17:39,570 --> 00:17:41,760
+Otherwise it will not be validated.
+
+266
+00:17:41,790 --> 00:17:42,480
+And what do we got.
+
+267
+00:17:42,480 --> 00:17:44,890
+We're going to get the decoded results.
+
+268
+00:17:44,960 --> 00:17:50,050
+I'm going to create a variable called Decoded and print it to the screen console dialog.
+
+269
+00:17:50,160 --> 00:17:52,820
+The first argument will be the string Decoded.
+
+270
+00:17:53,160 --> 00:17:58,320
+So it's easier to find in the terminal and the second one will be the actual decoded variable.
+
+271
+00:17:58,320 --> 00:18:04,380
+With this in place over inside of the terminal I can now rerun the file and right here we get our token
+
+272
+00:18:04,500 --> 00:18:07,800
+which we got earlier and we get our data.
+
+273
+00:18:07,890 --> 00:18:11,090
+We have our decoded data where the ID is 10 now.
+
+274
+00:18:11,130 --> 00:18:17,340
+Anything about the secret or the token changes before we call verify the call is not going to pass.
+
+275
+00:18:17,370 --> 00:18:18,450
+We're going to get an error.
+
+276
+00:18:18,480 --> 00:18:24,450
+For example let's manipulate the data by concatenating on the number one then we can rerun the file
+
+277
+00:18:24,450 --> 00:18:25,240
+and what do we get.
+
+278
+00:18:25,260 --> 00:18:26,160
+We get an error.
+
+279
+00:18:26,160 --> 00:18:27,530
+It's an invalid signature.
+
+280
+00:18:27,540 --> 00:18:30,210
+The data inside of that token is not what we expected.
+
+281
+00:18:30,210 --> 00:18:32,910
+It's been changed and you should not trust it.
+
+282
+00:18:32,910 --> 00:18:38,320
+If the secret is incorrect I'm going to add another C onto the end and you rerun the file.
+
+283
+00:18:38,340 --> 00:18:39,090
+What do we get.
+
+284
+00:18:39,120 --> 00:18:40,720
+We get the exact same error.
+
+285
+00:18:40,830 --> 00:18:44,420
+JWT is letting you know that something's not right with the data.
+
+286
+00:18:44,490 --> 00:18:49,380
+Only when the token is unaltered and the secret is the same as the one used to create the token.
+
+287
+00:18:49,380 --> 00:18:53,270
+Are we going to get the data back and this is exactly what we want.
+
+288
+00:18:53,370 --> 00:18:59,970
+Once we decode the data after the person makes the request with the token we can use that ID to start
+
+289
+00:19:00,060 --> 00:19:02,360
+actually doing the thing the user wants to do.
+
+290
+00:19:02,460 --> 00:19:07,810
+Whether it's creating a to do updating one deleting one or any other data manipulation.
+
+291
+00:19:07,980 --> 00:19:11,040
+I know that was a long video so thanks for bearing with me.
+
+292
+00:19:11,100 --> 00:19:17,100
+But it's really important that you understand hashing and the JWT concept now that we have both of these
+
+293
+00:19:17,100 --> 00:19:17,460
+down.
+
+294
+00:19:17,460 --> 00:19:22,380
+We can actually implement them into our application which is going to let us authenticate requests which
+
+295
+00:19:22,380 --> 00:19:25,130
+is the real purpose of this section.
+
+296
+00:19:25,140 --> 00:19:26,720
+Thanks again for bearing with me.
+
+297
+00:19:26,730 --> 00:19:27,750
+Hopefully you enjoyed it.
+
+298
+00:19:27,750 --> 00:19:30,120
+Stay tuned I will see you next time
+
